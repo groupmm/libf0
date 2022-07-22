@@ -29,7 +29,7 @@ A sawtooth waveform inspired pitch estimator for speech and music. The Journal o
 
 ## Installing
 
-If you just want to try our example notebook, you can run it using Binder directly in your browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://notebooks.gesis.org/binder/v2/gh/groupmm/libf0/main)
+If you just want to try our example notebook, you can run it using Binder directly in your browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/groupmm/libf0/HEAD)
 
 To install the libf0 locally, you can use the Python package manager pip:
 
