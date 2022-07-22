@@ -26,6 +26,8 @@ Melody extraction from polyphonic music signals using pitch contour characterist
 Arturo Camacho and John G. Harris.
 A sawtooth waveform inspired pitch estimator for speech and music. The Journal of the Acoustical Society of America, 124(3):1638–1652, 2008.
 
+Meinard Müller. Fundamentals of Music Processing – Using Python and Jupyter Notebooks. Springer Verlag, 2nd edition, 2021. ISBN 978-3-030-69807-2. doi: 10.1007/978-3-030-69808-9.
+
 
 ## Installing
 
