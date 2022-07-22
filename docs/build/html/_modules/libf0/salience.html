@@ -250,6 +250,7 @@
     <span class="n">Z_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">Z_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">Z_max</span><span class="p">)</span>
     <span class="n">sal</span> <span class="o">=</span> <span class="n">Z_norm</span><span class="p">[</span><span class="n">index_CR</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="n">sal</span><span class="p">[</span><span class="n">traj</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">return</span> <span class="n">traj</span><span class="p">,</span> <span class="n">T_coef</span><span class="p">,</span> <span class="n">sal</span></div>
 
@@ -368,7 +369,7 @@
     <span class="n">bin_assignment</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">inst_f</span><span class="p">))]</span> <span class="o">=</span> <span class="n">B</span>
 
     <span class="c1"># perform binning on power spectrogram for each time frame separately</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">Y_LF_IF_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">B</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
         <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">Y_LF_IF_bin</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">bin_assignment</span><span class="p">[:,</span> <span class="n">t</span><span class="p">],</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
@@ -397,8 +398,7 @@
 <span class="sd">    beta : float</span>
 <span class="sd">        Compression parameter for spectrogram magnitudes</span>
 <span class="sd">    gamma : float</span>
-<span class="sd">        Logarithmic compression factor</span>
-
+<span class="sd">        Magnitude threshold</span>
 <span class="sd">    harmonic_win_len : int</span>
 <span class="sd">        Length of a frequency weighting window in bins</span>
 

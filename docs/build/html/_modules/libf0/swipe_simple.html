@@ -166,7 +166,7 @@
   <h1>Source code for libf0.swipe_simple</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">| Description: libf0 SWIPE (simplified) implementation</span>
-<span class="sd">| Contributors: Sebastian Rosenzweig, Meinard Müller</span>
+<span class="sd">| Contributors: Sebastian Rosenzweig, Simon Schwär, Meinard Müller</span>
 <span class="sd">| License: The MIT license, https://opensource.org/licenses/MIT</span>
 <span class="sd">| This file is part of libf0.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -178,9 +178,9 @@
 
 <div class="viewcode-block" id="swipe_simple"><a class="viewcode-back" href="../../index_swipe_simple.html#libf0.swipe_simple.swipe_simple">[docs]</a><span class="k">def</span> <span class="nf">swipe_simple</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">22050</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">F_min</span><span class="o">=</span><span class="mf">55.0</span><span class="p">,</span> <span class="n">F_max</span><span class="o">=</span><span class="mf">1760.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">strength_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).</span>
-<span class="sd">    This version of the algorithm is simplified for better efficiency, see `swipe` for a re-implementation of the SWIPE</span>
-<span class="sd">    algorithm.</span>
+<span class="sd">    Simplified implementation of a sawtooth waveform inspired pitch estimator (SWIPE).</span>
+<span class="sd">    This version uses a log-frequency spectrogram instead of ERB filters. Furthermore, it is implemented more</span>
+<span class="sd">    efficiently. See `swipe()` for the original implementation.</span>
 
 <span class="sd">    .. [#] A. Camacho and J. G. Harris,</span>
 <span class="sd">       &quot;A sawtooth waveform inspired pitch estimator for speech and music.&quot;</span>

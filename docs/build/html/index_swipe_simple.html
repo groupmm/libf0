@@ -172,16 +172,16 @@
 <span id="swipe-simple"></span><h1>SWIPE (Simple)<a class="headerlink" href="#module-libf0.swipe_simple" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
 <div class="line">Description: libf0 SWIPE (simplified) implementation</div>
-<div class="line">Contributors: Sebastian Rosenzweig, Meinard Müller</div>
+<div class="line">Contributors: Sebastian Rosenzweig, Simon Schwär, Meinard Müller</div>
 <div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
 <div class="line">This file is part of libf0.</div>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="libf0.swipe_simple.swipe_simple">
 <span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">swipe_simple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#swipe_simple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.swipe_simple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
-This version of the algorithm is simplified for better efficiency, see <cite>swipe</cite> for a re-implementation of the SWIPE
-algorithm.</p>
+<dd><p>Simplified implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
+This version uses a log-frequency spectrogram instead of ERB filters. Furthermore, it is implemented more
+efficiently. See <cite>swipe()</cite> for the original implementation.</p>
 <dl class="footnote brackets">
 <dt class="label" id="id1"><span class="brackets">1</span></dt>
 <dd><p>A. Camacho and J. G. Harris,
