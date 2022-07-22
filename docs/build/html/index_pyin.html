@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pYIN &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Salience-based" href="index_salience.html" />
+    <link rel="prev" title="YIN" href="index_yin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index_yin.html">YIN</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pYIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_salience.html">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>pYIN</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index_pyin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-libf0.pyin">
+<span id="pyin"></span><h1>pYIN<a class="headerlink" href="#module-libf0.pyin" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Description: libf0 yin implementation</div>
+<div class="line">Contributors: Sebastian Rosenzweig, Simon Schwär, Edgar Andres Suarez Guarnizo, Meinard Müller</div>
+<div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
+<div class="line">This file is part of libf0.</div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.pyin">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">pyin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2048</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.01,</span> <span class="pre">0.02,</span> <span class="pre">0.03,</span> <span class="pre">0.04,</span> <span class="pre">0.05,</span> <span class="pre">0.06,</span> <span class="pre">0.07,</span> <span class="pre">0.08,</span> <span class="pre">0.09,</span> <span class="pre">0.1,</span> <span class="pre">0.11,</span> <span class="pre">0.12,</span> <span class="pre">0.13,</span> <span class="pre">0.14,</span> <span class="pre">0.15,</span> <span class="pre">0.16,</span> <span class="pre">0.17,</span> <span class="pre">0.18,</span> <span class="pre">0.19,</span> <span class="pre">0.2,</span> <span class="pre">0.21,</span> <span class="pre">0.22,</span> <span class="pre">0.23,</span> <span class="pre">0.24,</span> <span class="pre">0.25,</span> <span class="pre">0.26,</span> <span class="pre">0.27,</span> <span class="pre">0.28,</span> <span class="pre">0.29,</span> <span class="pre">0.3,</span> <span class="pre">0.31,</span> <span class="pre">0.32,</span> <span class="pre">0.33,</span> <span class="pre">0.34,</span> <span class="pre">0.35,</span> <span class="pre">0.36,</span> <span class="pre">0.37,</span> <span class="pre">0.38,</span> <span class="pre">0.39,</span> <span class="pre">0.4,</span> <span class="pre">0.41,</span> <span class="pre">0.42,</span> <span class="pre">0.43,</span> <span class="pre">0.44,</span> <span class="pre">0.45,</span> <span class="pre">0.46,</span> <span class="pre">0.47,</span> <span class="pre">0.48,</span> <span class="pre">0.49,</span> <span class="pre">0.5,</span> <span class="pre">0.51,</span> <span class="pre">0.52,</span> <span class="pre">0.53,</span> <span class="pre">0.54,</span> <span class="pre">0.55,</span> <span class="pre">0.56,</span> <span class="pre">0.57,</span> <span class="pre">0.58,</span> <span class="pre">0.59,</span> <span class="pre">0.6,</span> <span class="pre">0.61,</span> <span class="pre">0.62,</span> <span class="pre">0.63,</span> <span class="pre">0.64,</span> <span class="pre">0.65,</span> <span class="pre">0.66,</span> <span class="pre">0.67,</span> <span class="pre">0.68,</span> <span class="pre">0.69,</span> <span class="pre">0.7,</span> <span class="pre">0.71,</span> <span class="pre">0.72,</span> <span class="pre">0.73,</span> <span class="pre">0.74,</span> <span class="pre">0.75,</span> <span class="pre">0.76,</span> <span class="pre">0.77,</span> <span class="pre">0.78,</span> <span class="pre">0.79,</span> <span class="pre">0.8,</span> <span class="pre">0.81,</span> <span class="pre">0.82,</span> <span class="pre">0.83,</span> <span class="pre">0.84,</span> <span class="pre">0.85,</span> <span class="pre">0.86,</span> <span class="pre">0.87,</span> <span class="pre">0.88,</span> <span class="pre">0.89,</span> <span class="pre">0.9,</span> <span class="pre">0.91,</span> <span class="pre">0.92,</span> <span class="pre">0.93,</span> <span class="pre">0.94,</span> <span class="pre">0.95,</span> <span class="pre">0.96,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">18]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute_min_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voicing_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#pyin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.pyin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the pYIN F0-estimation algorithm.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p>Matthias Mauch and Simon Dixon.
+“PYIN: A fundamental frequency estimator using probabilistic threshold distributions”.
+IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (2014): 659-663.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – Audio signal</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Window size</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em><em> or </em><em>int</em>) – Minimal frequency</p></li>
+<li><p><strong>F_max</strong> (<em>float</em><em> or </em><em>int</em>) – Maximal frequency</p></li>
+<li><p><strong>R</strong> (<em>int</em>) – Frequency resolution given in cents</p></li>
+<li><p><strong>thresholds</strong> (<em>ndarray</em>) – Range of thresholds</p></li>
+<li><p><strong>beta_params</strong> (<em>tuple</em><em> or </em><em>list</em>) – Parameters of beta-distribution in the form [alpha, beta]</p></li>
+<li><p><strong>absolute_min_prob</strong> (<em>float</em>) – Prior for voice activity</p></li>
+<li><p><strong>voicing_prob</strong> (<em>float</em>) – Prior for transition probability?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f0</strong> (<em>ndarray</em>) – Estimated F0-trajectory</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time axis</p></li>
+<li><p><strong>conf</strong> (<em>ndarray</em>) – Confidence</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.refine_estimates_yin">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">refine_estimates_yin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#refine_estimates_yin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.refine_estimates_yin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refine estimates using YIN CMNDF information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f0</strong> (<em>ndarray</em>) – F0 in Hz</p></li>
+<li><p><strong>p_orig</strong> (<em>ndarray</em>) – Original lag as computed by YIN</p></li>
+<li><p><strong>val_orig</strong> (<em>ndarray</em>) – Original CMNDF values as computed by YIN</p></li>
+<li><p><strong>Fs</strong> (<em>float</em>) – Sampling frequency</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – Tolerance for refinements in cents</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>f0_refined</strong> – Refined F0-trajectory</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.probabilistic_thresholding">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">probabilistic_thresholding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmndf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute_min_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_distr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parabolic_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#probabilistic_thresholding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.probabilistic_thresholding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probabilistic thresholding of the YIN CMNDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmndf</strong> (<em>ndarray</em>) – Cumulative Mean Normalized Difference Function</p></li>
+<li><p><strong>thresholds</strong> (<em>ndarray</em>) – Array of thresholds for CMNDF</p></li>
+<li><p><strong>p_min</strong> (<em>float</em>) – Period corresponding to the lower frequency bound</p></li>
+<li><p><strong>p_max</strong> (<em>float</em>) – Period corresponding to the upper frequency bound</p></li>
+<li><p><strong>absolute_min_prob</strong> (<em>float</em>) – Probability to chose absolute minimum</p></li>
+<li><p><strong>F_axis</strong> (<em>ndarray</em>) – Frequency axis</p></li>
+<li><p><strong>Fs</strong> (<em>float</em>) – Sampling rate</p></li>
+<li><p><strong>beta_distr</strong> (<em>ndarray</em>) – Beta distribution that defines mapping between thresholds and probabilities</p></li>
+<li><p><strong>parabolic_interp</strong> (<em>bool</em>) – Switch to activate/deactivate parabolic interpolation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>O_m</strong> (<em>ndarray</em>) – Observations for given frame</p></li>
+<li><p><strong>lag_thr</strong> (<em>ndarray</em>) – Computed lags for every threshold</p></li>
+<li><p><strong>val_thr</strong> (<em>ndarray</em>) – CMNDF values for computed lag</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.yin_multi_thr">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">yin_multi_thr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_distr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute_min_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voicing_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parabolic_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#yin_multi_thr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.yin_multi_thr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies YIN multiple times on input audio signals using different thresholds for CMNDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – Input audio signal</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Window size</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em>) – Lower frequency bound</p></li>
+<li><p><strong>F_max</strong> (<em>float</em>) – Upper frequency bound</p></li>
+<li><p><strong>thresholds</strong> (<em>ndarray</em>) – Array of thresholds</p></li>
+<li><p><strong>beta_distr</strong> (<em>ndarray</em>) – Beta distribution that defines mapping between thresholds and probabilities</p></li>
+<li><p><strong>absolute_min_prob</strong> (<em>float</em>) – Probability to chose absolute minimum</p></li>
+<li><p><strong>F_axis</strong> (<em>ndarray</em>) – Frequency axis</p></li>
+<li><p><strong>voicing_prob</strong> (<em>float</em>) – Probability of a frame being voiced</p></li>
+<li><p><strong>parabolic_interp</strong> (<em>bool</em>) – Switch to activate/deactivate parabolic interpolation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>O</strong> (<em>ndarray</em>) – Observations based on YIN output</p></li>
+<li><p><strong>rms</strong> (<em>ndarray</em>) – Root mean square power</p></li>
+<li><p><strong>p_orig</strong> (<em>ndarray</em>) – Original YIN period estimates</p></li>
+<li><p><strong>val_orig</strong> (<em>ndarray</em>) – CMNDF values corresponding to original YIN period estimates</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.compute_transition_matrix">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">compute_transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triang_distr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#compute_transition_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.compute_transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a transition matrix for PYIN Viterbi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<em>int</em>) – Matrix dimension</p></li>
+<li><p><strong>triang_distr</strong> (<em>ndarray</em>) – (Triangular) distribution, defining tolerance for jumps deviating from the main diagonal</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>A</strong> – Transition matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.viterbi_pyin">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">viterbi_pyin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">O</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#viterbi_pyin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.viterbi_pyin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Viterbi algorithm (pYIN variant)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – ndarray
+State transition probability matrix of dimension I x I</p></li>
+<li><p><strong>C</strong> – ndarray
+Initial state distribution  of dimension I X 1</p></li>
+<li><p><strong>O</strong> – ndarray
+Likelihood matrix of dimension I x N</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>ndarray</dt><dd><p>Optimal state sequence of length N</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>idxs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.viterbi_log_likelihood">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">viterbi_log_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B_O</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#viterbi_log_likelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.viterbi_log_likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Viterbi algorithm (log variant) for solving the uncovering problem</p>
+<p>Notebook: C5/C5S3_Viterbi.ipynb</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – ndarray
+State transition probability matrix of dimension I x I</p></li>
+<li><p><strong>C</strong> – ndarray
+Initial state distribution  of dimension I</p></li>
+<li><p><strong>B_O</strong> – ndarray
+Likelihood matrix of dimension I x N</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>ndarray</dt><dd><p>Optimal state sequence of length N</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>S_opt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.pyin.delete_numba">
+<span class="sig-prename descclassname"><span class="pre">libf0.pyin.</span></span><span class="sig-name descname"><span class="pre">delete_numba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/pyin.html#delete_numba"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.pyin.delete_numba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete number from array, Numba compatible. Inspired by:
+<a class="reference external" href="https://stackoverflow.com/questions/53602663/delete-a-row-in-numpy-array-in-numba">https://stackoverflow.com/questions/53602663/delete-a-row-in-numpy-array-in-numba</a></p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="index_salience.html" class="btn btn-neutral float-right" title="Salience-based" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index_yin.html" class="btn btn-neutral float-left" title="YIN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

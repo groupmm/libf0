@@ -1,0 +1,689 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libf0.pyin &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">YIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pYIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>libf0.pyin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for libf0.pyin</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">| Description: libf0 yin implementation</span>
+<span class="sd">| Contributors: Sebastian Rosenzweig, Simon Schwär, Edgar Andres Suarez Guarnizo, Meinard Müller</span>
+<span class="sd">| License: The MIT license, https://opensource.org/licenses/MIT</span>
+<span class="sd">| This file is part of libf0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">beta</span><span class="p">,</span> <span class="n">comb</span>  <span class="c1"># Scipy library for binomial beta distribution</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">triang</span>      <span class="c1"># Scipy library for triangular distribution</span>
+<span class="kn">from</span> <span class="nn">.yin</span> <span class="kn">import</span> <span class="n">cumulative_mean_normalized_difference_function</span><span class="p">,</span> <span class="n">parabolic_interpolation</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+
+
+<span class="c1"># pYIN estimate computation</span>
+<div class="viewcode-block" id="pyin"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.pyin">[docs]</a><span class="k">def</span> <span class="nf">pyin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">22050</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">F_min</span><span class="o">=</span><span class="mf">55.0</span><span class="p">,</span> <span class="n">F_max</span><span class="o">=</span><span class="mf">1760.0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span>
+         <span class="n">beta_params</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span> <span class="n">absolute_min_prob</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">voicing_prob</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the pYIN F0-estimation algorithm.</span>
+
+<span class="sd">    .. [#] Matthias Mauch and Simon Dixon.</span>
+<span class="sd">        &quot;PYIN: A fundamental frequency estimator using probabilistic threshold distributions&quot;.</span>
+<span class="sd">        IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (2014): 659-663.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray</span>
+<span class="sd">        Audio signal</span>
+<span class="sd">    Fs : int</span>
+<span class="sd">        Sampling rate</span>
+<span class="sd">    N : int</span>
+<span class="sd">        Window size</span>
+<span class="sd">    H : int</span>
+<span class="sd">        Hop size</span>
+<span class="sd">    F_min : float or int</span>
+<span class="sd">        Minimal frequency</span>
+<span class="sd">    F_max : float or int</span>
+<span class="sd">        Maximal frequency</span>
+<span class="sd">    R : int</span>
+<span class="sd">        Frequency resolution given in cents</span>
+<span class="sd">    thresholds : ndarray</span>
+<span class="sd">        Range of thresholds</span>
+<span class="sd">    beta_params : tuple or list</span>
+<span class="sd">        Parameters of beta-distribution in the form [alpha, beta]</span>
+<span class="sd">    absolute_min_prob : float</span>
+<span class="sd">        Prior for voice activity</span>
+<span class="sd">    voicing_prob: float</span>
+<span class="sd">        Prior for transition probability?</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    f0 : ndarray</span>
+<span class="sd">        Estimated F0-trajectory</span>
+<span class="sd">    t : ndarray</span>
+<span class="sd">        Time axis</span>
+<span class="sd">    conf : ndarray</span>
+<span class="sd">        Confidence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_pad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)))</span>  <span class="c1"># Add zeros for centered estimates</span>
+
+    <span class="c1"># Compute Beta distribution</span>
+    <span class="n">thr_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">))</span>
+    <span class="n">beta_distr</span> <span class="o">=</span> <span class="n">comb</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">),</span> <span class="n">thr_idxs</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta</span><span class="p">(</span><span class="n">thr_idxs</span><span class="o">+</span><span class="n">beta_params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                        <span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span><span class="o">-</span><span class="n">thr_idxs</span><span class="o">+</span><span class="n">beta_params</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">beta</span><span class="p">(</span><span class="n">beta_params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                                                                        <span class="n">beta_params</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># YIN with multiple thresholds, yielding observation matrix</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_max</span> <span class="o">/</span> <span class="n">F_min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1200</span> <span class="o">/</span> <span class="n">R</span><span class="p">))</span>
+    <span class="n">F_axis</span> <span class="o">=</span> <span class="n">F_min</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">*</span> <span class="n">R</span> <span class="o">/</span> <span class="mi">1200</span><span class="p">)</span>  <span class="c1"># for quantizing the estimated F0s</span>
+    <span class="n">O</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">p_orig</span><span class="p">,</span> <span class="n">val_orig</span> <span class="o">=</span> <span class="n">yin_multi_thr</span><span class="p">(</span><span class="n">x_pad</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="n">Fs</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">F_min</span><span class="o">=</span><span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="o">=</span><span class="n">F_max</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="n">thresholds</span><span class="p">,</span>
+                                             <span class="n">beta_distr</span><span class="o">=</span><span class="n">beta_distr</span><span class="p">,</span> <span class="n">absolute_min_prob</span><span class="o">=</span><span class="n">absolute_min_prob</span><span class="p">,</span> <span class="n">F_axis</span><span class="o">=</span><span class="n">F_axis</span><span class="p">,</span>
+                                             <span class="n">voicing_prob</span><span class="o">=</span><span class="n">voicing_prob</span><span class="p">)</span>
+
+    <span class="c1"># Transition matrix, using triangular distribution used for pitch transition probabilities</span>
+    <span class="n">max_step_cents</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Pitch jump can be at most 50 cents from frame to frame</span>
+    <span class="n">max_step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_step_cents</span> <span class="o">/</span> <span class="n">R</span><span class="p">)</span>
+    <span class="n">triang_distr</span> <span class="o">=</span> <span class="n">triang</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">max_step</span><span class="p">,</span> <span class="n">max_step</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">max_step</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="n">max_step</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">compute_transition_matrix</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">triang_distr</span><span class="p">)</span>
+    
+    <span class="c1"># HMM smoothing</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">B</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">B</span><span class="p">)</span>  <span class="c1"># uniform initialization</span>
+    <span class="n">f0_idxs</span> <span class="o">=</span> <span class="n">viterbi_log_likelihood</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">O</span><span class="p">)</span>  <span class="c1"># libfmp Viterbi implementation</span>
+    
+    <span class="c1"># Obtain F0-trajectory</span>
+    <span class="n">F_axis_extended</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">F_axis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">F_axis</span><span class="p">))))</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">F_axis_extended</span><span class="p">[</span><span class="n">f0_idxs</span><span class="p">]</span>
+
+    <span class="c1"># Suppress low power estimates</span>
+    <span class="n">f0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># due to algorithmic reasons, we set the first value unvoiced</span>
+    <span class="n">f0</span><span class="p">[</span><span class="n">rms</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># confidence</span>
+    <span class="n">O_norm</span> <span class="o">=</span> <span class="n">O</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">O_norm</span><span class="p">[</span><span class="n">f0_idxs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+    <span class="c1"># Refine estimates by choosing the closest original YIN estimate</span>
+    <span class="n">refine_estimates</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">refine_estimates</span><span class="p">:</span>
+        <span class="n">f0</span> <span class="o">=</span> <span class="n">refine_estimates_yin</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">p_orig</span><span class="p">,</span> <span class="n">val_orig</span><span class="p">,</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">H</span> <span class="o">/</span> <span class="n">Fs</span>  <span class="c1"># Time axis</span>
+    
+    <span class="k">return</span> <span class="n">f0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">conf</span></div>
+
+
+<div class="viewcode-block" id="refine_estimates_yin"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.refine_estimates_yin">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">refine_estimates_yin</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">p_orig</span><span class="p">,</span> <span class="n">val_orig</span><span class="p">,</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">tol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refine estimates using YIN CMNDF information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f0 : ndarray</span>
+<span class="sd">        F0 in Hz</span>
+<span class="sd">    p_orig : ndarray</span>
+<span class="sd">        Original lag as computed by YIN</span>
+<span class="sd">    val_orig : ndarray</span>
+<span class="sd">        Original CMNDF values as computed by YIN</span>
+<span class="sd">    Fs : float</span>
+<span class="sd">        Sampling frequency</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        Tolerance for refinements in cents</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    f0_refined : ndarray</span>
+<span class="sd">        Refined F0-trajectory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f0_refined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span>
+    <span class="n">voiced_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">f0</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">f_orig</span> <span class="o">=</span> <span class="n">Fs</span> <span class="o">/</span> <span class="n">p_orig</span>
+
+    <span class="c1"># find closest original YIN estimate, maximally allowed absolute deviation: R (quantization error)</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">voiced_idxs</span><span class="p">:</span>
+        <span class="n">diff_cents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">f_orig</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">/</span> <span class="n">f0</span><span class="p">[</span><span class="n">m</span><span class="p">]))</span>
+        <span class="n">candidate_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff_cents</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate_idxs</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">f0_refined</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">f0</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f0_refined</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_orig</span><span class="p">[</span><span class="n">candidate_idxs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">val_orig</span><span class="p">[</span><span class="n">candidate_idxs</span><span class="p">,</span> <span class="n">m</span><span class="p">])],</span> <span class="n">m</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">f0_refined</span></div>
+
+
+<div class="viewcode-block" id="probabilistic_thresholding"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.probabilistic_thresholding">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">probabilistic_thresholding</span><span class="p">(</span><span class="n">cmndf</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">,</span> <span class="n">absolute_min_prob</span><span class="p">,</span> <span class="n">F_axis</span><span class="p">,</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">beta_distr</span><span class="p">,</span>
+                               <span class="n">parabolic_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Probabilistic thresholding of the YIN CMNDF.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cmndf : ndarray</span>
+<span class="sd">        Cumulative Mean Normalized Difference Function</span>
+<span class="sd">    thresholds : ndarray</span>
+<span class="sd">        Array of thresholds for CMNDF</span>
+<span class="sd">    p_min : float</span>
+<span class="sd">        Period corresponding to the lower frequency bound</span>
+<span class="sd">    p_max : float</span>
+<span class="sd">        Period corresponding to the upper frequency bound</span>
+<span class="sd">    absolute_min_prob : float</span>
+<span class="sd">        Probability to chose absolute minimum</span>
+<span class="sd">    F_axis : ndarray</span>
+<span class="sd">        Frequency axis</span>
+<span class="sd">    Fs : float</span>
+<span class="sd">        Sampling rate</span>
+<span class="sd">    beta_distr : ndarray</span>
+<span class="sd">        Beta distribution that defines mapping between thresholds and probabilities</span>
+<span class="sd">    parabolic_interp : bool</span>
+<span class="sd">        Switch to activate/deactivate parabolic interpolation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    O_m : ndarray</span>
+<span class="sd">        Observations for given frame</span>
+<span class="sd">    lag_thr : ndarray</span>
+<span class="sd">        Computed lags for every threshold</span>
+<span class="sd">    val_thr : ndarray</span>
+<span class="sd">        CMNDF values for computed lag</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restrict search range to interval [p_min:p_max]</span>
+    <span class="n">cmndf</span><span class="p">[:</span><span class="n">p_min</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">cmndf</span><span class="p">[</span><span class="n">p_max</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+    <span class="c1"># find local minima (assuming that cmndf is real in [p_min:p_max], you will always find a minimum,</span>
+    <span class="c1"># at least p_min or p_max)</span>
+    <span class="n">min_idxs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">((</span><span class="n">cmndf</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">cmndf</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cmndf</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">cmndf</span><span class="p">[</span><span class="mi">2</span><span class="p">:])))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">O_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">F_axis</span><span class="p">))</span>
+
+    <span class="c1"># return if no minima are found, e.g., when frame is silence</span>
+    <span class="k">if</span> <span class="n">min_idxs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">O_m</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span><span class="o">*</span><span class="n">p_min</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span>
+
+    <span class="c1"># Optional: Parabolic Interpolation of local minima</span>
+    <span class="k">if</span> <span class="n">parabolic_interp</span><span class="p">:</span>
+        <span class="c1"># do not interpolate at the boarders, Numba compatible workaround for np.delete()</span>
+        <span class="n">min_idxs_interp</span> <span class="o">=</span> <span class="n">delete_numba</span><span class="p">(</span><span class="n">min_idxs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">min_idxs</span> <span class="o">==</span> <span class="n">p_min</span><span class="p">))</span>
+        <span class="n">min_idxs_interp</span> <span class="o">=</span> <span class="n">delete_numba</span><span class="p">(</span><span class="n">min_idxs_interp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">min_idxs_interp</span> <span class="o">==</span> <span class="n">p_max</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">p_corr</span><span class="p">,</span> <span class="n">cmndf</span><span class="p">[</span><span class="n">min_idxs_interp</span><span class="p">]</span> <span class="o">=</span> <span class="n">parabolic_interpolation</span><span class="p">(</span><span class="n">cmndf</span><span class="p">[</span><span class="n">min_idxs_interp</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                                                                 <span class="n">cmndf</span><span class="p">[</span><span class="n">min_idxs_interp</span><span class="p">],</span>
+                                                                 <span class="n">cmndf</span><span class="p">[</span><span class="n">min_idxs_interp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">min_idxs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># set p_corr=0 at the boarders (no correction done later)</span>
+    <span class="k">if</span> <span class="n">min_idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p_min</span><span class="p">:</span>
+        <span class="n">p_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span> <span class="n">p_corr</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">min_idxs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">p_max</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">p_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">p_corr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])))</span>
+
+    <span class="n">lag_thr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span>
+    <span class="n">val_thr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">thresholds</span><span class="p">)</span>
+
+    <span class="c1"># loop over all thresholds</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">thresholds</span><span class="p">):</span>
+        <span class="c1"># minima below absolute threshold</span>
+        <span class="n">min_idxs_thr</span> <span class="o">=</span> <span class="n">min_idxs</span><span class="p">[</span><span class="n">cmndf</span><span class="p">[</span><span class="n">min_idxs</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">]</span>
+
+        <span class="c1"># find first local minimum</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">min_idxs_thr</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">lag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">cmndf</span><span class="p">)</span>  <span class="c1"># choose absolute minimum when no local minimum is found</span>
+            <span class="n">am_prob</span> <span class="o">=</span> <span class="n">absolute_min_prob</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cmndf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">am_prob</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">lag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">min_idxs_thr</span><span class="p">)</span>  <span class="c1"># choose first local minimum</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">cmndf</span><span class="p">[</span><span class="n">lag</span><span class="p">]</span>
+
+            <span class="c1"># correct lag</span>
+            <span class="k">if</span> <span class="n">parabolic_interp</span><span class="p">:</span>
+                <span class="n">lag</span> <span class="o">+=</span> <span class="n">p_corr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">min_idxs_thr</span><span class="p">)]</span>
+
+        <span class="c1"># ensure that lag is in [p_min:p_max]</span>
+        <span class="k">if</span> <span class="n">lag</span> <span class="o">&lt;</span> <span class="n">p_min</span><span class="p">:</span>
+            <span class="n">lag</span> <span class="o">=</span> <span class="n">p_min</span>
+        <span class="k">elif</span> <span class="n">lag</span> <span class="o">&gt;=</span> <span class="n">p_max</span><span class="p">:</span>
+            <span class="n">lag</span> <span class="o">=</span> <span class="n">p_max</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">lag_thr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lag</span>
+        <span class="n">val_thr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_axis</span> <span class="o">/</span> <span class="p">(</span><span class="n">Fs</span> <span class="o">/</span> <span class="n">lag</span><span class="p">))))</span>  <span class="c1"># quantize estimated period</span>
+        <span class="n">O_m</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="n">am_prob</span> <span class="o">*</span> <span class="n">beta_distr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># pYIN-Paper, Formula 4/5</span>
+
+    <span class="k">return</span> <span class="n">O_m</span><span class="p">,</span> <span class="n">lag_thr</span><span class="p">,</span> <span class="n">val_thr</span></div>
+
+
+<div class="viewcode-block" id="yin_multi_thr"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.yin_multi_thr">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">yin_multi_thr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">beta_distr</span><span class="p">,</span> <span class="n">absolute_min_prob</span><span class="p">,</span> <span class="n">F_axis</span><span class="p">,</span> <span class="n">voicing_prob</span><span class="p">,</span>
+                  <span class="n">parabolic_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies YIN multiple times on input audio signals using different thresholds for CMNDF.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray</span>
+<span class="sd">        Input audio signal</span>
+<span class="sd">    Fs : int</span>
+<span class="sd">        Sampling rate</span>
+<span class="sd">    N : int</span>
+<span class="sd">        Window size</span>
+<span class="sd">    H : int</span>
+<span class="sd">        Hop size</span>
+<span class="sd">    F_min : float</span>
+<span class="sd">        Lower frequency bound</span>
+<span class="sd">    F_max : float</span>
+<span class="sd">        Upper frequency bound</span>
+<span class="sd">    thresholds : ndarray</span>
+<span class="sd">        Array of thresholds</span>
+<span class="sd">    beta_distr : ndarray</span>
+<span class="sd">        Beta distribution that defines mapping between thresholds and probabilities</span>
+<span class="sd">    absolute_min_prob :float</span>
+<span class="sd">        Probability to chose absolute minimum</span>
+<span class="sd">    F_axis : ndarray</span>
+<span class="sd">        Frequency axis</span>
+<span class="sd">    voicing_prob : float</span>
+<span class="sd">        Probability of a frame being voiced</span>
+<span class="sd">    parabolic_interp : bool</span>
+<span class="sd">        Switch to activate/deactivate parabolic interpolation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    O : ndarray</span>
+<span class="sd">        Observations based on YIN output</span>
+<span class="sd">    rms : ndarray</span>
+<span class="sd">        Root mean square power</span>
+<span class="sd">    p_orig : ndarray</span>
+<span class="sd">        Original YIN period estimates</span>
+<span class="sd">    val_orig : ndarray</span>
+<span class="sd">        CMNDF values corresponding to original YIN period estimates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="n">H</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Compute number of estimates that will be generated</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">F_axis</span><span class="p">)</span>
+
+    <span class="n">p_min</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Fs</span> <span class="o">/</span> <span class="n">F_max</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># period of maximal frequency in frames</span>
+    <span class="n">p_max</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Fs</span> <span class="o">/</span> <span class="n">F_min</span><span class="p">))</span>  <span class="c1"># period of minimal frequency in frames</span>
+
+    <span class="k">if</span> <span class="n">p_max</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;N needs to be &lt;= Fs/F_min!&quot;</span><span class="p">)</span>
+
+    <span class="n">rms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>  <span class="c1"># RMS Power</span>
+    <span class="n">O</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>  <span class="c1"># every voiced state has an unvoiced state (important for later HMM modeling)</span>
+    <span class="n">p_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">),</span> <span class="n">M</span><span class="p">))</span>
+    <span class="n">val_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">),</span> <span class="n">M</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="c1"># Take a frame from input signal</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">m</span> <span class="o">*</span> <span class="n">H</span><span class="p">:</span><span class="n">m</span> <span class="o">*</span> <span class="n">H</span> <span class="o">+</span> <span class="n">N</span><span class="p">]</span>
+
+        <span class="c1"># Cumulative Mean Normalized Difference Function</span>
+        <span class="n">cmndf</span> <span class="o">=</span> <span class="n">cumulative_mean_normalized_difference_function</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">p_max</span><span class="p">)</span>
+
+        <span class="c1"># compute RMS power</span>
+        <span class="n">rms</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">frame</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        
+        <span class="c1"># Probabilistic Thresholding with different thresholds</span>
+        <span class="n">O_m</span><span class="p">,</span> <span class="n">p_est_thr</span><span class="p">,</span> <span class="n">val_thr</span> <span class="o">=</span> <span class="n">probabilistic_thresholding</span><span class="p">(</span><span class="n">cmndf</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">,</span> <span class="n">absolute_min_prob</span><span class="p">,</span> <span class="n">F_axis</span><span class="p">,</span>
+                                                             <span class="n">Fs</span><span class="p">,</span> <span class="n">beta_distr</span><span class="p">,</span> <span class="n">parabolic_interp</span><span class="o">=</span><span class="n">parabolic_interp</span><span class="p">)</span>
+
+        <span class="n">O</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">O_m</span>
+        <span class="n">p_orig</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_est_thr</span>  <span class="c1"># store original YIN estimates for later refinement</span>
+        <span class="n">val_orig</span><span class="p">[:,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_thr</span>  <span class="c1"># store original cmndf value of minimum corresponding to p_est</span>
+
+    <span class="c1"># normalization (pYIN-Paper, Formula 6)</span>
+    <span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">B</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="n">voicing_prob</span>
+    <span class="n">O</span><span class="p">[</span><span class="n">B</span><span class="p">:</span><span class="mi">2</span> <span class="o">*</span> <span class="n">B</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">voicing_prob</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">O</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">B</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">B</span>
+    
+    <span class="k">return</span> <span class="n">O</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">p_orig</span><span class="p">,</span> <span class="n">val_orig</span></div>
+
+
+<div class="viewcode-block" id="compute_transition_matrix"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.compute_transition_matrix">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">compute_transition_matrix</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">triang_distr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute a transition matrix for PYIN Viterbi.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    M : int</span>
+<span class="sd">        Matrix dimension</span>
+<span class="sd">    triang_distr : ndarray</span>
+<span class="sd">        (Triangular) distribution, defining tolerance for jumps deviating from the main diagonal</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A : ndarray</span>
+<span class="sd">        Transition matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_self</span> <span class="o">=</span> <span class="mf">0.99</span>
+        
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">))</span>
+    <span class="n">max_step</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">triang_distr</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_step</span><span class="p">:</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">max_step</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span><span class="p">[</span><span class="n">max_step</span> <span class="o">-</span> <span class="n">i</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">triang_distr</span><span class="p">[</span><span class="n">max_step</span> <span class="o">-</span> <span class="n">i</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">M</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="o">+</span><span class="n">max_step</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span><span class="p">[</span><span class="n">max_step</span> <span class="o">-</span> <span class="n">i</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">triang_distr</span><span class="p">[</span><span class="n">max_step</span> <span class="o">-</span> <span class="n">i</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">max_step</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">M</span><span class="o">-</span><span class="n">max_step</span><span class="p">:</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="n">max_step</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">max_step</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">)</span><span class="o">-</span><span class="n">max_step</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">)</span><span class="o">+</span><span class="n">max_step</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">M</span><span class="o">-</span><span class="n">max_step</span><span class="p">:</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">-</span><span class="n">max_step</span><span class="p">:</span><span class="n">M</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_step</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">M</span><span class="p">)]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">triang_distr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_step</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">M</span><span class="p">)])</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="o">-</span><span class="n">max_step</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob_self</span> <span class="o">*</span> <span class="n">triang_distr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_step</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">M</span><span class="p">)]</span> <span class="o">/</span> \
+                                       <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">triang_distr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_step</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">M</span><span class="p">)])</span>
+
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">prob_self</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">prob_self</span>
+    
+    <span class="k">return</span> <span class="n">A</span></div>
+
+
+<div class="viewcode-block" id="viterbi_pyin"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.viterbi_pyin">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">viterbi_pyin</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">O</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Viterbi algorithm (pYIN variant)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            A : ndarray</span>
+<span class="sd">                State transition probability matrix of dimension I x I</span>
+<span class="sd">            C : ndarray</span>
+<span class="sd">                Initial state distribution  of dimension I X 1</span>
+<span class="sd">            O : ndarray</span>
+<span class="sd">                Likelihood matrix of dimension I x N</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            idxs : ndarray</span>
+<span class="sd">                Optimal state sequence of length N</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">B</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">B</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">O</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># D matrix Intial state setting</span>
+
+    <span class="n">D</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># Normalization (using pYIN source code as a basis)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">abyd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">D</span><span class="p">[:,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abyd</span><span class="p">)</span> <span class="o">*</span> <span class="n">O</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="n">E</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">abyd</span><span class="p">)</span>
+
+        <span class="n">D</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span> <span class="n">n</span><span class="p">])</span>  <span class="c1"># Row normalization to avoid underflow (pYIN source code sparseHMM)</span>
+
+    <span class="n">idxs</span><span class="p">[</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">bkd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Intermediate variable to be compatible with Numba</span>
+        <span class="n">idxs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="n">bkd</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">idxs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="viterbi_log_likelihood"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.viterbi_log_likelihood">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">viterbi_log_likelihood</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">B_O</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Viterbi algorithm (log variant) for solving the uncovering problem</span>
+
+<span class="sd">    Notebook: C5/C5S3_Viterbi.ipynb</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        A : ndarray</span>
+<span class="sd">            State transition probability matrix of dimension I x I</span>
+<span class="sd">        C : ndarray</span>
+<span class="sd">            Initial state distribution  of dimension I</span>
+<span class="sd">        B_O : ndarray</span>
+<span class="sd">            Likelihood matrix of dimension I x N</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        S_opt : ndarray</span>
+<span class="sd">            Optimal state sequence of length N</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="c1"># Number of states</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">B_O</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Length of observation sequence</span>
+    <span class="n">tiny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span>
+    <span class="n">A_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="n">tiny</span><span class="p">)</span>
+    <span class="n">C_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">C</span> <span class="o">+</span> <span class="n">tiny</span><span class="p">)</span>
+    <span class="n">B_O_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">B_O</span> <span class="o">+</span> <span class="n">tiny</span><span class="p">)</span>
+
+    <span class="c1"># Initialize D and E matrices</span>
+    <span class="n">D_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I</span><span class="p">,</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">D_log</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C_log</span> <span class="o">+</span> <span class="n">B_O_log</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Compute D and E in a nested loop</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+            <span class="n">temp_sum</span> <span class="o">=</span> <span class="n">A_log</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">D_log</span><span class="p">[:,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">D_log</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">temp_sum</span><span class="p">)</span> <span class="o">+</span> <span class="n">B_O_log</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+            <span class="n">E</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">temp_sum</span><span class="p">)</span>
+
+    <span class="c1"># Backtracking</span>
+    <span class="n">S_opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">S_opt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">D_log</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">S_opt</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">S_opt</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span> <span class="n">n</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">S_opt</span></div>
+
+
+<div class="viewcode-block" id="delete_numba"><a class="viewcode-back" href="../../index_pyin.html#libf0.pyin.delete_numba">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">delete_numba</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Delete number from array, Numba compatible. Inspired by:</span>
+<span class="sd">        https://stackoverflow.com/questions/53602663/delete-a-row-in-numpy-array-in-numba</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">arr</span> <span class="o">==</span> <span class="n">num</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

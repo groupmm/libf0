@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libf0.utils &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">YIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pYIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>libf0.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for libf0.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">| Description: libf0 utility functions</span>
+<span class="sd">| Contributors: Sebastian Rosenzweig, Meinard Müller</span>
+<span class="sd">| License: The MIT license, https://opensource.org/licenses/MIT</span>
+<span class="sd">| This file is part of libf0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="sonify_trajectory_with_sinusoid"><a class="viewcode-back" href="../../index_utils.html#libf0.utils.sonify_trajectory_with_sinusoid">[docs]</a><span class="k">def</span> <span class="nf">sonify_trajectory_with_sinusoid</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">audio_len</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">22050</span><span class="p">,</span> <span class="n">smooth_len</span><span class="o">=</span><span class="mi">11</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sonification of trajectory with sinusoidal. Adapted from FMP notebook: C8/C8S2_FundFreqTracking.ipynb</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f0 : ndarray</span>
+<span class="sd">        F0-trajectory</span>
+<span class="sd">    t : ndarray</span>
+<span class="sd">        Time axis</span>
+<span class="sd">    audio_len : int</span>
+<span class="sd">        Desired audio length in samples</span>
+<span class="sd">    confidence : None or ndarray</span>
+<span class="sd">        Confidence values for amplitude control</span>
+<span class="sd">    Fs : int</span>
+<span class="sd">        Sampling rate</span>
+<span class="sd">    smooth_len : int</span>
+<span class="sd">        Smoothing filter length to avoid clicks in the sonification</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x_soni : ndarray</span>
+<span class="sd">        Sonified F0-trajectory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">confidence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span>
+
+    <span class="c1"># initialize</span>
+    <span class="n">x_soni</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">audio_len</span><span class="p">)</span>
+    <span class="n">amplitude_mod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">audio_len</span><span class="p">)</span>
+
+    <span class="c1"># Computation of hop size</span>
+    <span class="n">sine_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">Fs</span><span class="p">)</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sine_len</span><span class="p">)</span> <span class="o">/</span> <span class="n">Fs</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># loop over all F0 values, ensure continuous phase</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f0</span><span class="p">)):</span>
+        <span class="n">cur_f</span> <span class="o">=</span> <span class="n">f0</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">cur_amp</span> <span class="o">=</span> <span class="n">confidence</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">cur_f</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">continue</span>
+
+        <span class="n">cur_soni</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">cur_f</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="n">phase</span><span class="p">))</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sine_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_soni</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x_soni</span><span class="p">[</span><span class="n">idx</span> <span class="o">*</span> <span class="n">sine_len</span><span class="p">:(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">sine_len</span> <span class="o">-</span> <span class="n">diff</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_soni</span><span class="p">[:</span><span class="o">-</span><span class="n">diff</span><span class="p">]</span>
+            <span class="n">amplitude_mod</span><span class="p">[</span><span class="n">idx</span> <span class="o">*</span> <span class="n">sine_len</span><span class="p">:(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">sine_len</span> <span class="o">-</span> <span class="n">diff</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_amp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_soni</span><span class="p">[</span><span class="n">idx</span><span class="o">*</span><span class="n">sine_len</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sine_len</span><span class="o">-</span><span class="n">diff</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_soni</span>
+            <span class="n">amplitude_mod</span><span class="p">[</span><span class="n">idx</span><span class="o">*</span><span class="n">sine_len</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">sine_len</span><span class="o">-</span><span class="n">diff</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_amp</span>
+
+        <span class="n">phase</span> <span class="o">+=</span> <span class="n">cur_f</span> <span class="o">*</span> <span class="n">sine_len</span> <span class="o">/</span> <span class="n">Fs</span>
+        <span class="n">phase</span> <span class="o">-=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">phase</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># filter amplitudes to avoid transients</span>
+    <span class="n">amplitude_mod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">amplitude_mod</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">hanning</span><span class="p">(</span><span class="n">smooth_len</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hanning</span><span class="p">(</span><span class="n">smooth_len</span><span class="p">)),</span> <span class="s1">&#39;same&#39;</span><span class="p">)</span>
+    <span class="n">x_soni</span> <span class="o">=</span> <span class="n">x_soni</span> <span class="o">*</span> <span class="n">amplitude_mod</span>
+    <span class="k">return</span> <span class="n">x_soni</span></div>
+
+
+<div class="viewcode-block" id="hz_to_cents"><a class="viewcode-back" href="../../index_utils.html#libf0.utils.hz_to_cents">[docs]</a><span class="k">def</span> <span class="nf">hz_to_cents</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">F_ref</span><span class="o">=</span><span class="mf">55.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts frequency in Hz to cents.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    F : float or ndarray</span>
+<span class="sd">        Frequency value in Hz</span>
+<span class="sd">    F_ref : float</span>
+<span class="sd">        Reference frequency in Hz (Default value = 55.0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    F_cents : float or ndarray</span>
+<span class="sd">        Frequency in cents</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">F_cents</span> <span class="o">=</span> <span class="mi">1200</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F</span> <span class="o">/</span> <span class="n">F_ref</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">F_cents</span></div>
+
+
+<div class="viewcode-block" id="cents_to_hz"><a class="viewcode-back" href="../../index_utils.html#libf0.utils.cents_to_hz">[docs]</a><span class="k">def</span> <span class="nf">cents_to_hz</span><span class="p">(</span><span class="n">F_cents</span><span class="p">,</span> <span class="n">F_ref</span><span class="o">=</span><span class="mf">55.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts frequency in cents to Hz</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    F_cents : float or ndarray</span>
+<span class="sd">        Frequency in cents</span>
+<span class="sd">    F_ref : float</span>
+<span class="sd">        Reference frequency in Hz (Default value = 55.0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    F : float or ndarray</span>
+<span class="sd">        Frequency in Hz</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">F_ref</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">F_cents</span> <span class="o">/</span> <span class="mi">1200</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">F</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SWIPE (Simple) &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utils" href="index_utils.html" />
+    <link rel="prev" title="SWIPE" href="index_swipe.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index_yin.html">YIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pYIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_salience.html">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SWIPE (Simple)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index_swipe_simple.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-libf0.swipe_simple">
+<span id="swipe-simple"></span><h1>SWIPE (Simple)<a class="headerlink" href="#module-libf0.swipe_simple" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Description: libf0 SWIPE (simplified) implementation</div>
+<div class="line">Contributors: Sebastian Rosenzweig, Meinard Müller</div>
+<div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
+<div class="line">This file is part of libf0.</div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.swipe_simple.swipe_simple">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">swipe_simple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#swipe_simple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.swipe_simple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
+This version of the algorithm is simplified for better efficiency, see <cite>swipe</cite> for a re-implementation of the SWIPE
+algorithm.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p>A. Camacho and J. G. Harris,
+“A sawtooth waveform inspired pitch estimator for speech and music.”
+The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–1652, Sep. 2008</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – Audio signal</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em><em> or </em><em>int</em>) – Minimal frequency</p></li>
+<li><p><strong>F_max</strong> (<em>float</em><em> or </em><em>int</em>) – Maximal frequency</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – resolution of the pitch candidate bins in cents (default = 10)</p></li>
+<li><p><strong>strength_threshold</strong> (<em>float</em>) – confidence threshold [0, 1] for the pitch detection (default value = 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f0</strong> (<em>ndarray</em>) – Estimated F0-trajectory</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Time axis</p></li>
+<li><p><strong>conf</strong> (<em>ndarray</em>) – Confidence / Pitch Strength</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.swipe_simple.compute_kernel">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">compute_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_coef_log_hz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#compute_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.compute_kernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a SWIPE’ kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>float</em>) – Frequency in Hz</p></li>
+<li><p><strong>F_coef_log_hz</strong> – Logarithmic frequency axis in Hz</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>k</strong> – Kernel</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.swipe_simple.prime_and_one">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">prime_and_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#prime_and_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.prime_and_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of prime numbers, adapted from <a class="reference external" href="http://rebrained.com/?p=458">http://rebrained.com/?p=458</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>upto</strong> (<em>int</em>) – Find prime numbers up to this number</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>A set of prime numbers including 1 &amp; 2</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="index_utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index_swipe.html" class="btn btn-neutral float-left" title="SWIPE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

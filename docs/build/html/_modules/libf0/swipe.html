@@ -1,0 +1,497 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libf0.swipe &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">YIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pYIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>libf0.swipe</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for libf0.swipe</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">| Description: libf0 SWIPE (simplified) implementation</span>
+<span class="sd">| Contributors: Sebastian Rosenzweig, Meinard Müller</span>
+<span class="sd">| License: The MIT license, https://opensource.org/licenses/MIT</span>
+<span class="sd">| This file is part of libf0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">librosa</span>
+
+
+<div class="viewcode-block" id="swipe"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.swipe">[docs]</a><span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">22050</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">F_min</span><span class="o">=</span><span class="mf">55.0</span><span class="p">,</span> <span class="n">F_max</span><span class="o">=</span><span class="mf">1760.0</span><span class="p">,</span> <span class="n">dlog2p</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">96</span><span class="p">,</span> <span class="n">derbs</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">strength_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).</span>
+<span class="sd">    This version of the algorithm follows the original implementation, see `swipe_simple` for a more efficient</span>
+<span class="sd">    alternative.</span>
+
+<span class="sd">    .. [#] Arturo Camacho and John G. Harris,</span>
+<span class="sd">       &quot;A sawtooth waveform inspired pitch estimator for speech and music.&quot;</span>
+<span class="sd">       The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–1652, Sep. 2008</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : ndarray</span>
+<span class="sd">        Audio signal</span>
+<span class="sd">    Fs : int</span>
+<span class="sd">        Sampling rate</span>
+<span class="sd">    H : int</span>
+<span class="sd">        Hop size</span>
+<span class="sd">    F_min : float or int</span>
+<span class="sd">        Minimal frequency</span>
+<span class="sd">    F_max : float or int</span>
+<span class="sd">        Maximal frequency</span>
+<span class="sd">    dlog2p : float</span>
+<span class="sd">        resolution of the pitch candidate bins in octaves (default value = 1/96 -&gt; 96 bins per octave)</span>
+<span class="sd">    derbs : float</span>
+<span class="sd">        resolution of the ERB bands (default value = 0.1)</span>
+<span class="sd">    strength_threshold : float</span>
+<span class="sd">        confidence threshold [0, 1] for the pitch detection (default value = 0)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    f0 : ndarray</span>
+<span class="sd">        Estimated F0-trajectory</span>
+<span class="sd">    t : ndarray</span>
+<span class="sd">        Time axis</span>
+<span class="sd">    strength : ndarray</span>
+<span class="sd">        Confidence/Pitch Strength</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="n">Fs</span>  <span class="c1"># Times</span>
+
+    <span class="c1"># Compute pitch candidates</span>
+    <span class="n">pc</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_max</span><span class="p">),</span> <span class="n">dlog2p</span><span class="p">)</span>
+
+    <span class="c1"># Pitch strength matrix</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">pc</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+
+    <span class="c1"># Determine P2-WSs [max, min]</span>
+    <span class="n">logWs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">Fs</span><span class="p">,</span> <span class="p">[</span><span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">])))</span>
+    <span class="c1"># print(f&#39;Log max and min window size: {logWs}&#39;)</span>
+
+    <span class="c1"># P2-WSs - window sizes in samples</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">logWs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">logWs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="c1"># print(f&#39;window sizes in samples: {ws}&#39;)</span>
+
+    <span class="c1"># Determine window sizes used by each pitch candidate</span>
+    <span class="n">log2pc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_min</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_max</span><span class="p">),</span> <span class="n">dlog2p</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">log2pc</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">Fs</span><span class="p">,</span> <span class="n">ws</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># Create ERBs spaced frequencies (in Hertz)</span>
+    <span class="n">fERBs</span> <span class="o">=</span> <span class="n">erbs2hz</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">hz2erbs</span><span class="p">(</span><span class="n">pc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">4</span><span class="p">),</span> <span class="n">hz2erbs</span><span class="p">(</span><span class="n">Fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">derbs</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ws</span><span class="p">)):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">ws</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">x_zero_padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">stft</span><span class="p">(</span><span class="n">x_zero_padded</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">pad_mode</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">frames_to_time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">sr</span><span class="o">=</span><span class="n">Fs</span><span class="p">,</span> <span class="n">hop_length</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">fft_frequencies</span><span class="p">(</span><span class="n">sr</span><span class="o">=</span><span class="n">Fs</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">magnitude</span> <span class="o">=</span> <span class="n">resample_ferbs</span><span class="p">(</span><span class="n">spectrum</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fERBs</span><span class="p">)</span>
+        <span class="n">loudness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">magnitude</span><span class="p">)</span>
+
+        <span class="c1"># Select candidates that use this window size</span>
+        <span class="c1"># First window</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="c1"># Last Window</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+
+        <span class="n">pc_to_compute</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+        <span class="n">pitch_strength</span> <span class="o">=</span> <span class="n">pitch_strength_all_candidates</span><span class="p">(</span><span class="n">fERBs</span><span class="p">,</span> <span class="n">loudness</span><span class="p">,</span> <span class="n">pc_to_compute</span><span class="p">)</span>
+
+        <span class="n">resampled_pitch_strength</span> <span class="o">=</span> <span class="n">resample_time</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">ti</span><span class="p">)</span>
+
+        <span class="n">lambda_</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">-</span> <span class="n">i</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+        <span class="n">mu</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lambda_</span><span class="p">)</span>
+
+        <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">resampled_pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">resampled_pitch_strength</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Fine-tune the pitch using parabolic interpolation</span>
+    <span class="n">pitches</span><span class="p">,</span> <span class="n">strength</span> <span class="o">=</span> <span class="n">parabolic_int</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">strength_threshold</span><span class="p">,</span> <span class="n">pc</span><span class="p">)</span>
+
+    <span class="n">pitches</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pitches</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># avoid NaN output</span>
+
+    <span class="k">return</span> <span class="n">pitches</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">strength</span></div>
+
+
+<div class="viewcode-block" id="nyquist"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.nyquist">[docs]</a><span class="k">def</span> <span class="nf">nyquist</span><span class="p">(</span><span class="n">Fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Nyquist Frequency&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Fs</span> <span class="o">/</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="F_coef"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.F_coef">[docs]</a><span class="k">def</span> <span class="nf">F_coef</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">Fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Physical frequency of STFT coefficients&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">Fs</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span></div>
+
+
+<div class="viewcode-block" id="T_coef"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.T_coef">[docs]</a><span class="k">def</span> <span class="nf">T_coef</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Physical time of STFT coefficients&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">m</span> <span class="o">*</span> <span class="n">H</span> <span class="o">/</span> <span class="n">Fs</span></div>
+
+
+<div class="viewcode-block" id="stft_with_f_t"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.stft_with_f_t">[docs]</a><span class="k">def</span> <span class="nf">stft_with_f_t</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Fs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;STFT wrapper&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">stft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">H</span><span class="p">),</span> <span class="n">pad_mode</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">F_coef</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">N</span><span class="p">,</span> <span class="n">Fs</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">T_coef</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">H</span><span class="p">,</span> <span class="n">Fs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span></div>
+
+
+<div class="viewcode-block" id="hz2erbs"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.hz2erbs">[docs]</a><span class="k">def</span> <span class="nf">hz2erbs</span><span class="p">(</span><span class="n">hz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert Hz to ERB scale&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">21.4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">hz</span> <span class="o">/</span> <span class="mi">229</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="erbs2hz"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.erbs2hz">[docs]</a><span class="k">def</span> <span class="nf">erbs2hz</span><span class="p">(</span><span class="n">erbs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert ERB to Hz&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">erbs</span><span class="p">,</span> <span class="mf">21.4</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">229</span></div>
+
+
+<div class="viewcode-block" id="pitch_strength_all_candidates"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.pitch_strength_all_candidates">[docs]</a><span class="k">def</span> <span class="nf">pitch_strength_all_candidates</span><span class="p">(</span><span class="n">ferbs</span><span class="p">,</span> <span class="n">loudness</span><span class="p">,</span> <span class="n">pitch_candidates</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute pitch strength for all pitch candidates&quot;&quot;&quot;</span>
+    <span class="c1"># Normalize loudness</span>
+    <span class="n">normalization_loudness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">loudness</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">loudness</span> <span class="o">*</span> <span class="n">loudness</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">loudness</span> <span class="o">=</span> <span class="n">loudness</span> <span class="o">/</span> <span class="n">normalization_loudness</span>
+
+    <span class="c1"># Create pitch salience matrix</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">pitch_candidates</span><span class="p">),</span> <span class="n">loudness</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pitch_candidates</span><span class="p">)):</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">pitch_strength_one</span><span class="p">(</span><span class="n">ferbs</span><span class="p">,</span> <span class="n">loudness</span><span class="p">,</span> <span class="n">pitch_candidates</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">S</span></div>
+
+
+<div class="viewcode-block" id="pitch_strength_one"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.pitch_strength_one">[docs]</a><span class="k">def</span> <span class="nf">pitch_strength_one</span><span class="p">(</span><span class="n">erbs_frequencies</span><span class="p">,</span> <span class="n">normalized_loudness</span><span class="p">,</span> <span class="n">pitch_candidate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute pitch strength for one pitch candidate&quot;&quot;&quot;</span>
+    <span class="n">number_of_harmonics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">erbs_frequencies</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">pitch_candidate</span> <span class="o">-</span> <span class="mf">0.75</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">erbs_frequencies</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># f_prime / f</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">erbs_frequencies</span> <span class="o">/</span> <span class="n">pitch_candidate</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">1</span><span class="p">],</span> <span class="n">primes</span><span class="p">(</span><span class="n">number_of_harmonics</span><span class="p">))):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.25</span>
+        <span class="n">k</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">p</span><span class="p">]))</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">k</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">q</span><span class="p">[</span><span class="n">v</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># Apply envelope</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">erbs_frequencies</span><span class="p">))</span>
+
+    <span class="c1"># K+-normalize kernel</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Compute pitch strength</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">normalized_loudness</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">S</span></div>
+
+
+<div class="viewcode-block" id="resample_ferbs"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.resample_ferbs">[docs]</a><span class="k">def</span> <span class="nf">resample_ferbs</span><span class="p">(</span><span class="n">spectrum</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ferbs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resample to ERB scale&quot;&quot;&quot;</span>
+    <span class="n">magnitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ferbs</span><span class="p">),</span> <span class="n">spectrum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">spectrum</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">spl</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">spectrum</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
+        <span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">ferbs</span><span class="p">,</span> <span class="n">spl</span><span class="p">)</span>
+
+        <span class="n">magnitude</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">ferbs</span><span class="p">,</span> <span class="n">spl</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">magnitude</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="resample_time"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.resample_time">[docs]</a><span class="k">def</span> <span class="nf">resample_time</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">,</span> <span class="n">resampled_time</span><span class="p">,</span> <span class="n">ti</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resample time axis&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pitch_strength</span> <span class="o">=</span> <span class="n">interpolate_one_candidate</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">resampled_time</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pitch_strength</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">resampled_time</span><span class="p">))),</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pitch_strength</span></div>
+
+
+<div class="viewcode-block" id="interpolate_one_candidate"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.interpolate_one_candidate">[docs]</a><span class="k">def</span> <span class="nf">interpolate_one_candidate</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">,</span> <span class="n">ti</span><span class="p">,</span> <span class="n">resampled_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interpolate time axis&quot;&quot;&quot;</span>
+    <span class="n">pitch_strength_interpolated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">resampled_time</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">t_i</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">pitch_strength</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pitch_strength_interpolated</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">t_i</span><span class="p">(</span><span class="n">resampled_time</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pitch_strength_interpolated</span></div>
+
+
+<div class="viewcode-block" id="parabolic_int"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.parabolic_int">[docs]</a><span class="k">def</span> <span class="nf">parabolic_int</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">,</span> <span class="n">strength_threshold</span><span class="p">,</span> <span class="n">pc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parabolic interpolation between pitch candidates using pitch strength&quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],),</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],),</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pitch_strength</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pitch_strength</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">strength_threshold</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">tc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">pc</span><span class="p">[</span><span class="n">I</span><span class="p">]</span>
+            <span class="n">ntc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">tc</span> <span class="o">/</span> <span class="n">tc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pitch_strength</span><span class="p">[</span><span class="n">I</span><span class="p">,</span> <span class="n">j</span><span class="p">])):</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">ntc</span><span class="p">,</span> <span class="n">pitch_strength</span><span class="p">[</span><span class="n">I</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">ftc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">pc</span><span class="p">[</span><span class="n">I</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">pc</span><span class="p">[</span><span class="n">I</span><span class="p">[</span><span class="mi">2</span><span class="p">]]),</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">12</span> <span class="o">/</span> <span class="mi">64</span><span class="p">)</span>
+                <span class="n">nftc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">ftc</span> <span class="o">/</span> <span class="n">tc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+                <span class="n">poly</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">nftc</span><span class="p">)</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">poly</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">pc</span><span class="p">[</span><span class="n">I</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">+</span> <span class="n">k</span> <span class="o">/</span> <span class="mi">12</span> <span class="o">/</span> <span class="mi">64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="primes"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.primes">[docs]</a><span class="k">def</span> <span class="nf">primes</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a set of n prime numbers&quot;&quot;&quot;</span>
+    <span class="n">small_primes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span>
+                             <span class="mi">97</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="mi">137</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">151</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">167</span><span class="p">,</span> <span class="mi">173</span><span class="p">,</span> <span class="mi">179</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span>
+                             <span class="mi">191</span><span class="p">,</span> <span class="mi">193</span><span class="p">,</span> <span class="mi">197</span><span class="p">,</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">257</span><span class="p">,</span> <span class="mi">263</span><span class="p">,</span> <span class="mi">269</span><span class="p">,</span> <span class="mi">271</span><span class="p">,</span> <span class="mi">277</span><span class="p">,</span> <span class="mi">281</span><span class="p">,</span>
+                             <span class="mi">283</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">307</span><span class="p">,</span> <span class="mi">311</span><span class="p">,</span> <span class="mi">313</span><span class="p">,</span> <span class="mi">317</span><span class="p">,</span> <span class="mi">331</span><span class="p">,</span> <span class="mi">337</span><span class="p">,</span> <span class="mi">347</span><span class="p">,</span> <span class="mi">349</span><span class="p">,</span> <span class="mi">353</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">373</span><span class="p">,</span> <span class="mi">379</span><span class="p">,</span> <span class="mi">383</span><span class="p">,</span> <span class="mi">389</span><span class="p">,</span> <span class="mi">397</span><span class="p">,</span>
+                             <span class="mi">401</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span> <span class="mi">419</span><span class="p">,</span> <span class="mi">421</span><span class="p">,</span> <span class="mi">431</span><span class="p">,</span> <span class="mi">433</span><span class="p">,</span> <span class="mi">439</span><span class="p">,</span> <span class="mi">443</span><span class="p">,</span> <span class="mi">449</span><span class="p">,</span> <span class="mi">457</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">463</span><span class="p">,</span> <span class="mi">467</span><span class="p">,</span> <span class="mi">479</span><span class="p">,</span> <span class="mi">487</span><span class="p">,</span> <span class="mi">491</span><span class="p">,</span> <span class="mi">499</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span>
+                             <span class="mi">509</span><span class="p">,</span> <span class="mi">521</span><span class="p">,</span> <span class="mi">523</span><span class="p">,</span> <span class="mi">541</span><span class="p">,</span> <span class="mi">547</span><span class="p">,</span> <span class="mi">557</span><span class="p">,</span> <span class="mi">563</span><span class="p">,</span> <span class="mi">569</span><span class="p">,</span> <span class="mi">571</span><span class="p">,</span> <span class="mi">577</span><span class="p">,</span> <span class="mi">587</span><span class="p">,</span> <span class="mi">593</span><span class="p">,</span> <span class="mi">599</span><span class="p">,</span> <span class="mi">601</span><span class="p">,</span> <span class="mi">607</span><span class="p">,</span> <span class="mi">613</span><span class="p">,</span> <span class="mi">617</span><span class="p">,</span> <span class="mi">619</span><span class="p">,</span>
+                             <span class="mi">631</span><span class="p">,</span> <span class="mi">641</span><span class="p">,</span> <span class="mi">643</span><span class="p">,</span> <span class="mi">647</span><span class="p">,</span> <span class="mi">653</span><span class="p">,</span> <span class="mi">659</span><span class="p">,</span> <span class="mi">661</span><span class="p">,</span> <span class="mi">673</span><span class="p">,</span> <span class="mi">677</span><span class="p">,</span> <span class="mi">683</span><span class="p">,</span> <span class="mi">691</span><span class="p">,</span> <span class="mi">701</span><span class="p">,</span> <span class="mi">709</span><span class="p">,</span> <span class="mi">719</span><span class="p">,</span> <span class="mi">727</span><span class="p">,</span> <span class="mi">733</span><span class="p">,</span> <span class="mi">739</span><span class="p">,</span> <span class="mi">743</span><span class="p">,</span>
+                             <span class="mi">751</span><span class="p">,</span> <span class="mi">757</span><span class="p">,</span> <span class="mi">761</span><span class="p">,</span> <span class="mi">769</span><span class="p">,</span> <span class="mi">773</span><span class="p">,</span> <span class="mi">787</span><span class="p">,</span> <span class="mi">797</span><span class="p">,</span> <span class="mi">809</span><span class="p">,</span> <span class="mi">811</span><span class="p">,</span> <span class="mi">821</span><span class="p">,</span> <span class="mi">823</span><span class="p">,</span> <span class="mi">827</span><span class="p">,</span> <span class="mi">829</span><span class="p">,</span> <span class="mi">839</span><span class="p">,</span> <span class="mi">853</span><span class="p">,</span> <span class="mi">857</span><span class="p">,</span> <span class="mi">859</span><span class="p">,</span> <span class="mi">863</span><span class="p">,</span>
+                             <span class="mi">877</span><span class="p">,</span> <span class="mi">881</span><span class="p">,</span> <span class="mi">883</span><span class="p">,</span> <span class="mi">887</span><span class="p">,</span> <span class="mi">907</span><span class="p">,</span> <span class="mi">911</span><span class="p">,</span> <span class="mi">919</span><span class="p">,</span> <span class="mi">929</span><span class="p">,</span> <span class="mi">937</span><span class="p">,</span> <span class="mi">941</span><span class="p">,</span> <span class="mi">947</span><span class="p">,</span> <span class="mi">953</span><span class="p">,</span> <span class="mi">967</span><span class="p">,</span> <span class="mi">971</span><span class="p">,</span> <span class="mi">977</span><span class="p">,</span> <span class="mi">983</span><span class="p">,</span> <span class="mi">991</span><span class="p">,</span> <span class="mi">997</span><span class="p">])</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">small_primes</span> <span class="o">&lt;=</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">small_primes</span><span class="p">[</span><span class="n">b</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

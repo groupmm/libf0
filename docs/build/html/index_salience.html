@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Salience-based &mdash; libf0 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SWIPE" href="index_swipe.html" />
+    <link rel="prev" title="pYIN" href="index_pyin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/libf0.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index_yin.html">YIN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pYIN</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Salience-based</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe.html">SWIPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">libf0</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Salience-based</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index_salience.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-libf0.salience">
+<span id="salience-based"></span><h1>Salience-based<a class="headerlink" href="#module-libf0.salience" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Description: libf0 salience-based F0 estimation implementation</div>
+<div class="line">Author: Sebastian Rosenzweig, Simon Schwär, Meinard Müller</div>
+<div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
+<div class="line">This file is part of libf0.</div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.salience">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">salience</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2048</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_harm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_smooth_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint_region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#salience"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.salience" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of a salience-based F0-estimation algorithm using pitch contours, inspired by Melodia.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p>Justin Salamon and Emilia Gómez,
+“Melody Extraction From Polyphonic Music Signals Using Pitch Contour Characteristics.”
+IEEE Transactions on Audio, Speech, and Language Processing, vol. 20, no. 6, pp. 1759–1770, Aug. 2012.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – Audio signal</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Window size</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em><em> or </em><em>int</em>) – Minimal frequency</p></li>
+<li><p><strong>F_max</strong> (<em>float</em><em> or </em><em>int</em>) – Maximal frequency</p></li>
+<li><p><strong>R</strong> (<em>int</em>) – Frequency resolution given in cents</p></li>
+<li><p><strong>num_harm</strong> (<em>int</em>) – Number of harmonics (Default value = 10)</p></li>
+<li><p><strong>freq_smooth_len</strong> (<em>int</em>) – Filter length for vertical smoothing (Default value = 11)</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Weighting parameter for harmonics (Default value = 0.9)</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Logarithmic compression factor (Default value = 0.0)</p></li>
+<li><p><strong>constraint_region</strong> (<em>None</em><em> or </em><em>ndarray</em>) – Constraint regions, row-format: (t_start_sec, t_end_sec, f_start_hz, f_end,hz)
+(Default value = None)</p></li>
+<li><p><strong>tol</strong> (<em>int</em>) – Tolerance parameter for transition matrix (Default value = 5)</p></li>
+<li><p><strong>score_low</strong> (<em>float</em>) – Score (low) for transition matrix (Default value = 0.01)</p></li>
+<li><p><strong>score_high</strong> (<em>float</em>) – Score (high) for transition matrix (Default value = 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f0</strong> (<em>ndarray</em>) – Estimated F0-trajectory</p></li>
+<li><p><strong>T_coef</strong> (<em>ndarray</em>) – Time axis</p></li>
+<li><p><strong>sal</strong> (<em>ndarray</em>) – Salience value of estimated F0</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_SalienceRepresentation.ipynb</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.compute_salience_rep">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">compute_salience_rep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_harm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_smooth_len</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#compute_salience_rep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.compute_salience_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute salience representation [FMP, Eq. (8.56)]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray</em>) – Audio signal</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Window size</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em><em> or </em><em>int</em>) – Minimal frequency</p></li>
+<li><p><strong>F_max</strong> (<em>float</em><em> or </em><em>int</em>) – Maximal frequency</p></li>
+<li><p><strong>R</strong> (<em>int</em>) – Frequency resolution given in cents</p></li>
+<li><p><strong>num_harm</strong> (<em>int</em>) – Number of harmonics</p></li>
+<li><p><strong>freq_smooth_len</strong> (<em>int</em>) – Filter length for vertical smoothing</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Weighting parameter for harmonics</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Logarithmic compression factor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Z</strong> (<em>ndarray</em>) – Salience representation</p></li>
+<li><p><strong>F_coef_hertz</strong> (<em>ndarray</em>) – Frequency axis in Hz</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_SalienceRepresentation.ipynb</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.compute_y_lf_if_bin_eff">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">compute_y_lf_if_bin_eff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#compute_y_lf_if_bin_eff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.compute_y_lf_if_bin_eff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binned Log-frequency Spectrogram with variable frequency resolution based on instantaneous frequency,
+more efficient implementation than FMP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>) – Complex spectrogram</p></li>
+<li><p><strong>Fs</strong> (<em>int</em>) – Sampling rate in Hz</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – Window size</p></li>
+<li><p><strong>H</strong> (<em>int</em>) – Hop size</p></li>
+<li><p><strong>F_min</strong> (<em>float</em><em> or </em><em>int</em>) – Minimal frequency</p></li>
+<li><p><strong>F_max</strong> (<em>float</em><em> or </em><em>int</em>) – Maximal frequency</p></li>
+<li><p><strong>R</strong> (<em>int</em>) – Frequency resolution given in cents</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Y_LF_IF_bin</strong> (<em>ndarray</em>) – Binned log-frequency spectrogram using instantaneous frequency (shape: [freq, time])</p></li>
+<li><p><strong>F_coef_hertz</strong> (<em>ndarray</em>) – Frequency axis in Hz</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.compute_salience_from_logfreq_spec">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">compute_salience_from_logfreq_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lf_spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_harmonics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonic_win_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#compute_salience_from_logfreq_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.compute_salience_from_logfreq_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute salience representation using harmonic summation following [1]</p>
+<dl class="simple">
+<dt>[1] J. Salamon and E. Gomez,</dt><dd><p>“Melody Extraction From Polyphonic Music Signals Using Pitch Contour Characteristics.”
+IEEE Transactions on Audio, Speech, and Language Processing, vol. 20, no. 6, pp. 1759–1770, Aug. 2012.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lf_spec</strong> (<em>ndarray</em>) – (F, T) log-spectrogram</p></li>
+<li><p><strong>R</strong> (<em>int</em>) – Frequency resolution given in cents</p></li>
+<li><p><strong>n_harmonics</strong> (<em>int</em>) – Number of harmonics</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Weighting parameter for harmonics</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – Compression parameter for spectrogram magnitudes</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Logarithmic compression factor</p></li>
+<li><p><strong>harmonic_win_len</strong> (<em>int</em>) – Length of a frequency weighting window in bins</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Z</strong> – (F, T) salience representation of the input spectrogram</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.define_transition_matrix">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">define_transition_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#define_transition_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.define_transition_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate transition matrix for dynamic programming</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> (<em>int</em>) – Number of bins</p></li>
+<li><p><strong>tol</strong> (<em>int</em>) – Tolerance parameter for transition matrix (Default value = 0)</p></li>
+<li><p><strong>score_low</strong> (<em>float</em>) – Score (low) for transition matrix (Default value = 0.01)</p></li>
+<li><p><strong>score_high</strong> (<em>float</em>) – Score (high) for transition matrix (Default value = 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>T</strong> – (B, B) Transition matrix</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_FundFreqTracking.ipynb</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.compute_trajectory_dp">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">compute_trajectory_dp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#compute_trajectory_dp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.compute_trajectory_dp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trajectory tracking using dynamic programming</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>ndarray</em>) – Salience representation</p></li>
+<li><p><strong>T</strong> (<em>ndarray</em>) – Transisition matrix</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>eta_DP</strong> – Trajectory indices</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_FundFreqTracking.ipynb</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.compute_trajectory_cr">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">compute_trajectory_cr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_coef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_coef_hertz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint_region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#compute_trajectory_cr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.compute_trajectory_cr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trajectory tracking with constraint regions
+Notebook: C8/C8S2_FundFreqTracking.ipynb</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>ndarray</em>) – Salience representation</p></li>
+<li><p><strong>T_coef</strong> (<em>ndarray</em>) – Time axis</p></li>
+<li><p><strong>F_coef_hertz</strong> (<em>ndarray</em>) – Frequency axis in Hz</p></li>
+<li><p><strong>constraint_region</strong> (<em>ndarray</em><em> or </em><em>None</em>) – Constraint regions, row-format: (t_start_sec, t_end_sec, f_start_hz, f_end_hz)
+(Default value = None)</p></li>
+<li><p><strong>tol</strong> (<em>int</em>) – Tolerance parameter for transition matrix (Default value = 5)</p></li>
+<li><p><strong>score_low</strong> (<em>float</em>) – Score (low) for transition matrix (Default value = 0.01)</p></li>
+<li><p><strong>score_high</strong> (<em>float</em>) – Score (high) for transition matrix (Default value = 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>eta</strong> – Trajectory indices, unvoiced frames are indicated with -1</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_FundFreqTracking.ipynb</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="libf0.salience.frequency_to_bin_index">
+<span class="sig-prename descclassname"><span class="pre">libf0.salience.</span></span><span class="sig-name descname"><span class="pre">frequency_to_bin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_ref</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/salience.html#frequency_to_bin_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.salience.frequency_to_bin_index" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Binning function with variable frequency resolution
+Note: Indexing starts with 0 (opposed to [FMP, Eq. (8.49)])</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<em>float</em><em> or </em><em>ndarray</em>) – Frequency in Hz</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – Frequency resolution in cents (Default value = 10.0)</p></li>
+<li><p><strong>F_ref</strong> (<em>float</em>) – Reference frequency in Hz (Default value = 55.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>bin_index (int)</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Index for bin (starting with index 0)</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[FMP] Notebook: C8/C8S2_SalienceRepresentation.ipynb</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="index_swipe.html" class="btn btn-neutral float-right" title="SWIPE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index_pyin.html" class="btn btn-neutral float-left" title="pYIN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Sebastian Rosenzweig, Simon Schwär, Meinard Müller
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
