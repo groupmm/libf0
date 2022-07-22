@@ -1,1 +1,15 @@
+*.pyc
 .DS_Store
+.idea
+
+# ignore files created when preparing package for PyPi
+build/
+dist/
+*.egg-info/
+
+# ignore cache files
+.ipynb_checkpoints
+.pytest_cache
+
+# do not ignore build of docs
+!docs/build/
