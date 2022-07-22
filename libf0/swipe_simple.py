@@ -12,9 +12,9 @@ from scipy.interpolate import interp1d
 
 def swipe_simple(x, Fs=22050, H=256, F_min=55.0, F_max=1760.0, R=10, strength_threshold=0):
     """
-    Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
-    This version of the algorithm is simplified for better efficiency, see `swipe` for a re-implementation of the SWIPE
-    algorithm.
+    Simplified implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
+    This version uses a log-frequency spectrogram instead of ERB filters. Furthermore, it is implemented more
+    efficiently. See `swipe()` for the original implementation.
 
     .. [#] A. Camacho and J. G. Harris,
        "A sawtooth waveform inspired pitch estimator for speech and music."
