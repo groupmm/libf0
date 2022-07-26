@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">YIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pYIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">Salience-based</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">SWIPE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_simple.html">SWIPE (Simple)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">yin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pyin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">salience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">swipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_slim.html">swipe_slim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">utils</a></li>
 </ul>
 
             
@@ -247,19 +247,24 @@
 <span class="sd">        Frequency value in Hz</span>
 <span class="sd">    F_ref : float</span>
 <span class="sd">        Reference frequency in Hz (Default value = 55.0)</span>
-
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    F_cents : float or ndarray</span>
 <span class="sd">        Frequency in cents</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">F_cents</span> <span class="o">=</span> <span class="mi">1200</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F</span> <span class="o">/</span> <span class="n">F_ref</span><span class="p">)</span>
+
+    <span class="c1"># Avoid division by 0</span>
+    <span class="n">F_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">F_temp</span><span class="p">[</span><span class="n">F_temp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">F_cents</span> <span class="o">=</span> <span class="mi">1200</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">F_temp</span> <span class="o">/</span> <span class="n">F_ref</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">F_cents</span></div>
 
 
 <div class="viewcode-block" id="cents_to_hz"><a class="viewcode-back" href="../../index_utils.html#libf0.utils.cents_to_hz">[docs]</a><span class="k">def</span> <span class="nf">cents_to_hz</span><span class="p">(</span><span class="n">F_cents</span><span class="p">,</span> <span class="n">F_ref</span><span class="o">=</span><span class="mf">55.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts frequency in cents to Hz</span>
+<span class="sd">    Converts frequency in cents to Hz.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -267,13 +272,16 @@
 <span class="sd">        Frequency in cents</span>
 <span class="sd">    F_ref : float</span>
 <span class="sd">        Reference frequency in Hz (Default value = 55.0)</span>
-
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    F : float or ndarray</span>
 <span class="sd">        Frequency in Hz</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">F</span> <span class="o">=</span> <span class="n">F_ref</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">F_cents</span> <span class="o">/</span> <span class="mi">1200</span><span class="p">)</span>
+
+    <span class="c1"># Avoid NaN output</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">F</span></div>
 </pre></div>
 

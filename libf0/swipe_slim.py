@@ -1,5 +1,5 @@
 """
-| Description: libf0 SWIPE (simplified) implementation
+| Description: libf0 SWIPE slim implementation
 | Contributors: Sebastian Rosenzweig, Simon Schwär, Meinard Müller
 | License: The MIT license, https://opensource.org/licenses/MIT
 | This file is part of libf0.
@@ -10,9 +10,9 @@ from .yin import parabolic_interpolation
 from scipy.interpolate import interp1d
 
 
-def swipe_simple(x, Fs=22050, H=256, F_min=55.0, F_max=1760.0, R=10, strength_threshold=0):
+def swipe_slim(x, Fs=22050, H=256, F_min=55.0, F_max=1760.0, R=10, strength_threshold=0):
     """
-    Simplified implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
+    Slim and didactical implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
     This version uses a log-frequency spectrogram instead of ERB filters. Furthermore, it is implemented more
     efficiently. See `swipe()` for the original implementation.
 

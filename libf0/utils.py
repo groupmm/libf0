@@ -81,19 +81,24 @@ def hz_to_cents(F, F_ref=55.0):
         Frequency value in Hz
     F_ref : float
         Reference frequency in Hz (Default value = 55.0)
-
     Returns
     -------
     F_cents : float or ndarray
         Frequency in cents
     """
-    F_cents = 1200 * np.log2(F / F_ref)
+
+    # Avoid division by 0
+    F_temp = np.array(F).astype(float)
+    F_temp[F_temp == 0] = np.nan
+
+    F_cents = 1200 * np.log2(F_temp / F_ref)
+
     return F_cents
 
 
 def cents_to_hz(F_cents, F_ref=55.0):
     """
-    Converts frequency in cents to Hz
+    Converts frequency in cents to Hz.
 
     Parameters
     ----------
@@ -101,11 +106,14 @@ def cents_to_hz(F_cents, F_ref=55.0):
         Frequency in cents
     F_ref : float
         Reference frequency in Hz (Default value = 55.0)
-
     Returns
     -------
     F : float or ndarray
         Frequency in Hz
     """
     F = F_ref * 2 ** (F_cents / 1200)
+
+    # Avoid NaN output
+    F = np.nan_to_num(F, copy=False, nan=0)
+
     return F

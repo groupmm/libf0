@@ -94,12 +94,12 @@
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">YIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pYIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">Salience-based</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">SWIPE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_simple.html">SWIPE (Simple)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_yin.html">yin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_pyin.html">pyin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_salience.html">salience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe.html">swipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_swipe_slim.html">swipe_slim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_utils.html">utils</a></li>
 </ul>
 
             
@@ -165,7 +165,7 @@
             
   <h1>Source code for libf0.swipe</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">| Description: libf0 SWIPE (simplified) implementation</span>
+<span class="sd">| Description: libf0 SWIPE implementation</span>
 <span class="sd">| Contributors: Sebastian Rosenzweig, Vojtěch Pešek, Simon Schwär, Meinard Müller</span>
 <span class="sd">| License: The MIT license, https://opensource.org/licenses/MIT</span>
 <span class="sd">| This file is part of libf0.</span>
@@ -178,7 +178,7 @@
 <div class="viewcode-block" id="swipe"><a class="viewcode-back" href="../../index_swipe.html#libf0.swipe.swipe">[docs]</a><span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Fs</span><span class="o">=</span><span class="mi">22050</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">F_min</span><span class="o">=</span><span class="mf">55.0</span><span class="p">,</span> <span class="n">F_max</span><span class="o">=</span><span class="mf">1760.0</span><span class="p">,</span> <span class="n">dlog2p</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">96</span><span class="p">,</span> <span class="n">derbs</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">strength_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).</span>
-<span class="sd">    This version of the algorithm follows the original implementation, see `swipe_simple` for a more efficient</span>
+<span class="sd">    This version of the algorithm follows the original implementation, see `swipe_slim` for a more efficient</span>
 <span class="sd">    alternative.</span>
 
 <span class="sd">    .. [#] Arturo Camacho and John G. Harris,</span>

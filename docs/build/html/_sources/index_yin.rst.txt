@@ -1,4 +1,4 @@
-YIN
+yin
 ==============
 
 .. automodule:: libf0.yin

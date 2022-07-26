@@ -1,4 +1,4 @@
-Salience-based
+salience
 ==============
 
 .. automodule:: libf0.salience
