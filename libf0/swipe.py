@@ -1,5 +1,5 @@
 """
-| Description: libf0 SWIPE (simplified) implementation
+| Description: libf0 SWIPE implementation
 | Contributors: Sebastian Rosenzweig, Vojtěch Pešek, Simon Schwär, Meinard Müller
 | License: The MIT license, https://opensource.org/licenses/MIT
 | This file is part of libf0.
@@ -12,7 +12,7 @@ import librosa
 def swipe(x, Fs=22050, H=256, F_min=55.0, F_max=1760.0, dlog2p=1 / 96, derbs=0.1, strength_threshold=0):
     """
     Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
-    This version of the algorithm follows the original implementation, see `swipe_simple` for a more efficient
+    This version of the algorithm follows the original implementation, see `swipe_slim` for a more efficient
     alternative.
 
     .. [#] Arturo Camacho and John G. Harris,

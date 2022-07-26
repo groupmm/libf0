@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SWIPE &mdash; libf0 1.0.0 documentation</title>
+  <title>swipe &mdash; libf0 1.0.0 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="SWIPE (Simple)" href="index_swipe_simple.html" />
-    <link rel="prev" title="Salience-based" href="index_salience.html" /> 
+    <link rel="next" title="swipe_slim" href="index_swipe_slim.html" />
+    <link rel="prev" title="salience" href="index_salience.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +97,11 @@
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index_yin.html">YIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pYIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_salience.html">Salience-based</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SWIPE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_swipe_simple.html">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_yin.html">yin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pyin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_salience.html">salience</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">swipe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe_slim.html">swipe_slim</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index_utils.html">Utils</a></li>
 </ul>
 
@@ -149,7 +149,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>SWIPE</li>
+      <li>swipe</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -169,9 +169,9 @@
            <div itemprop="articleBody">
             
   <section id="module-libf0.swipe">
-<span id="swipe"></span><h1>SWIPE<a class="headerlink" href="#module-libf0.swipe" title="Permalink to this headline">¶</a></h1>
+<span id="swipe"></span><h1>swipe<a class="headerlink" href="#module-libf0.swipe" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">Description: libf0 SWIPE (simplified) implementation</div>
+<div class="line">Description: libf0 SWIPE implementation</div>
 <div class="line">Contributors: Sebastian Rosenzweig, Vojtěch Pešek, Simon Schwär, Meinard Müller</div>
 <div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
 <div class="line">This file is part of libf0.</div>
@@ -180,7 +180,7 @@
 <dt class="sig sig-object py" id="libf0.swipe.swipe">
 <span class="sig-prename descclassname"><span class="pre">libf0.swipe.</span></span><span class="sig-name descname"><span class="pre">swipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dlog2p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.010416666666666666</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe.html#swipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe.swipe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
-This version of the algorithm follows the original implementation, see <cite>swipe_simple</cite> for a more efficient
+This version of the algorithm follows the original implementation, see <cite>swipe_slim</cite> for a more efficient
 alternative.</p>
 <dl class="footnote brackets">
 <dt class="label" id="id1"><span class="brackets">1</span></dt>
@@ -301,10 +301,10 @@ The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–16
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="index_swipe_simple.html" class="btn btn-neutral float-right" title="SWIPE (Simple)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="index_swipe_slim.html" class="btn btn-neutral float-right" title="swipe_slim" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index_salience.html" class="btn btn-neutral float-left" title="Salience-based" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index_salience.html" class="btn btn-neutral float-left" title="salience" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

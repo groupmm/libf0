@@ -1,4 +1,4 @@
-pYIN
+pyin
 ==============
 
 .. automodule:: libf0.pyin

@@ -37,5 +37,5 @@ To reference the original algorithms implemented in this toolbox, please cite:
     index_pyin
     index_salience
     index_swipe
-    index_swipe_simple
+    index_swipe_slim
     index_utils

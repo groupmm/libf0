@@ -109,13 +109,13 @@ def test_swipe():
                        atol=50)
 
 
-def test_swipe_simple():
+def test_swipe_slim():
     R = 10
     strength_threshold = 0
-    f0_swipes_x1, t_swipes_x1, conf_swipes_x1 = libf0.swipe_simple(x1, Fs=Fs, H=H, F_min=F_min, F_max=F_max, R=R,
-                                                                   strength_threshold=strength_threshold)
-    f0_swipes_x2, t_swipes_x2, conf_swipes_x2 = libf0.swipe_simple(x2, Fs=Fs, H=H, F_min=F_min, F_max=F_max, R=R,
-                                                                   strength_threshold=strength_threshold)
+    f0_swipes_x1, t_swipes_x1, conf_swipes_x1 = libf0.swipe_slim(x1, Fs=Fs, H=H, F_min=F_min, F_max=F_max, R=R,
+                                                                 strength_threshold=strength_threshold)
+    f0_swipes_x2, t_swipes_x2, conf_swipes_x2 = libf0.swipe_slim(x2, Fs=Fs, H=H, F_min=F_min, F_max=F_max, R=R,
+                                                                 strength_threshold=strength_threshold)
 
     # exclude first an last frame due to artifacts at signal edges
     assert np.allclose(libf0.hz_to_cents(f0_swipes_x1[1:-1]), libf0.hz_to_cents(F_sine), rtol=0, atol=atol_sine)

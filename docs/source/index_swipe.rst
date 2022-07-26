@@ -1,4 +1,4 @@
-SWIPE
+swipe
 ==============
 
 .. automodule:: libf0.swipe

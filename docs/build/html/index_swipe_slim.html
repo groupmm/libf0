@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SWIPE (Simple) &mdash; libf0 1.0.0 documentation</title>
+  <title>swipe_slim &mdash; libf0 1.0.0 documentation</title>
   
 
   
@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Utils" href="index_utils.html" />
-    <link rel="prev" title="SWIPE" href="index_swipe.html" /> 
+    <link rel="prev" title="swipe" href="index_swipe.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +97,11 @@
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index_yin.html">YIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pYIN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_salience.html">Salience-based</a></li>
-<li class="toctree-l1"><a class="reference internal" href="index_swipe.html">SWIPE</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SWIPE (Simple)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_yin.html">yin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_pyin.html">pyin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_salience.html">salience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index_swipe.html">swipe</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">swipe_slim</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index_utils.html">Utils</a></li>
 </ul>
 
@@ -149,13 +149,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>SWIPE (Simple)</li>
+      <li>swipe_slim</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index_swipe_simple.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/index_swipe_slim.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -168,18 +168,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="module-libf0.swipe_simple">
-<span id="swipe-simple"></span><h1>SWIPE (Simple)<a class="headerlink" href="#module-libf0.swipe_simple" title="Permalink to this headline">¶</a></h1>
+  <section id="module-libf0.swipe_slim">
+<span id="swipe-slim"></span><h1>swipe_slim<a class="headerlink" href="#module-libf0.swipe_slim" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">Description: libf0 SWIPE (simplified) implementation</div>
+<div class="line">Description: libf0 SWIPE slim implementation</div>
 <div class="line">Contributors: Sebastian Rosenzweig, Simon Schwär, Meinard Müller</div>
 <div class="line">License: The MIT license, <a class="reference external" href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></div>
 <div class="line">This file is part of libf0.</div>
 </div>
 <dl class="py function">
-<dt class="sig sig-object py" id="libf0.swipe_simple.swipe_simple">
-<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">swipe_simple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#swipe_simple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.swipe_simple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simplified implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
+<dt class="sig sig-object py" id="libf0.swipe_slim.swipe_slim">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_slim.</span></span><span class="sig-name descname"><span class="pre">swipe_slim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">22050</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">55.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1760.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_slim.html#swipe_slim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_slim.swipe_slim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slim and didactical implementation of a sawtooth waveform inspired pitch estimator (SWIPE).
 This version uses a log-frequency spectrogram instead of ERB filters. Furthermore, it is implemented more
 efficiently. See <cite>swipe()</cite> for the original implementation.</p>
 <dl class="footnote brackets">
@@ -213,8 +213,8 @@ The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–16
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="libf0.swipe_simple.compute_kernel">
-<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">compute_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_coef_log_hz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#compute_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.compute_kernel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="libf0.swipe_slim.compute_kernel">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_slim.</span></span><span class="sig-name descname"><span class="pre">compute_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_coef_log_hz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_slim.html#compute_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_slim.compute_kernel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a SWIPE’ kernel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -233,8 +233,8 @@ The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–16
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="libf0.swipe_simple.prime_and_one">
-<span class="sig-prename descclassname"><span class="pre">libf0.swipe_simple.</span></span><span class="sig-name descname"><span class="pre">prime_and_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_simple.html#prime_and_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_simple.prime_and_one" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="libf0.swipe_slim.prime_and_one">
+<span class="sig-prename descclassname"><span class="pre">libf0.swipe_slim.</span></span><span class="sig-name descname"><span class="pre">prime_and_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upto</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libf0/swipe_slim.html#prime_and_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#libf0.swipe_slim.prime_and_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a set of prime numbers, adapted from <a class="reference external" href="http://rebrained.com/?p=458">http://rebrained.com/?p=458</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -262,7 +262,7 @@ The Journal of the Acoustical Society of America, vol. 124, no. 3, pp. 1638–16
         <a href="index_utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index_swipe.html" class="btn btn-neutral float-left" title="SWIPE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index_swipe.html" class="btn btn-neutral float-left" title="swipe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
