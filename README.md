@@ -11,7 +11,7 @@ If you use the libf0 in your research, please consider the following references.
 ## References
 
 Sebastian Rosenzweig, Simon Schwär, Meinard Müller.
-[libf0: A Python Library for Fundamental Frequency Estimation in Music Recordings.](https://joss.theoj.org) Submitted to Journal of Open Source Software (JOSS), X(X), 2022.
+libf0: A Python Library for Fundamental Frequency Estimation. Submitted to the Late-Breaking Demo Session, International Society for Music Information Retrieval (ISMIR) 2022 Conference
 
 Alain de Cheveigné and Hideki Kawahara.
 YIN, a fundamental frequency estimator for speech and music. Journal of the Acoustical Society of America (JASA), 111(4):1917–1930, 2002.
