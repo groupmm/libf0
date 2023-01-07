@@ -6,7 +6,7 @@ with open('README.md', 'r') as fdesc:
 
 setup(
     name='libf0',
-    version='1.0.0',
+    version='1.0.1',
     description='A Python Library for Fundamental Frequency Estimation in Music Recordings',
     author='Sebastian Rosenzweig, Simon Schwär, and Meinard Müller',
     author_email='meinard.mueller@audiolabs-erlangen.de',
