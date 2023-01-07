@@ -9,7 +9,7 @@ libf0
 
 If you use this toolbox, please cite:
 
-.. [#] Sebastian Rosenzweig, Simon Schwär, Meinard Müller. libf0: A Python Library for Fundamental Frequency Estimation. Submitted to the Late-Breaking Demo Session, International Society for Music Information Retrieval (ISMIR) 2022 Conference
+.. [#] Sebastian Rosenzweig, Simon Schwär, and Meinard Müller. libf0: A Python Library for Fundamental Frequency Estimation. In Late Breaking Demos of the International Society for Music Information Retrieval Conference (ISMIR), Bengaluru, India, 2022.
 
 
 To reference the original algorithms implemented in this toolbox, please cite:
