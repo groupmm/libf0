@@ -54,6 +54,13 @@ def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=
     conf : ndarray
         Confidence
     """
+
+    if F_min > F_max:
+        raise Exception("F_min must be smaller than F_max!")
+
+    if F_min < Fs/N:        
+        raise Exception(f"The condition (F_min >= Fs/N) was not met. With {Fs = }, {N = } and {F_min = } you have the following options: \n1) Set F_min >= {np.ceil(Fs/N)} Hz. \n2) Set N >= {np.ceil(Fs/F_min)}. \n3) Set Fs <= {np.floor(F_min * N)} Hz.")
+
     x_pad = np.concatenate((np.zeros(N // 2), x, np.zeros(N // 2)))  # Add zeros for centered estimates
 
     # Compute Beta distribution
@@ -299,7 +306,7 @@ def yin_multi_thr(x, Fs, N, H, F_min, F_max, thresholds, beta_distr, absolute_mi
     p_max = int(np.ceil(Fs / F_min))  # period of minimal frequency in frames
 
     if p_max > N:
-        raise Exception("N needs to be <= Fs/F_min!")
+        raise Exception("The condition (Fmin >= Fs/N) was not met.")
 
     rms = np.zeros(M)  # RMS Power
     O = np.zeros((2 * B, M))  # every voiced state has an unvoiced state (important for later HMM modeling)
