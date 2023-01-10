@@ -49,7 +49,7 @@ def yin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, threshold=0.15, ve
         raise Exception("F_min must be smaller than F_max!")
 
     if F_min < Fs/N:        
-        raise Exception(f"The condition (F_min >= Fs/N) was not met. With {Fs = }, {N = } and {F_min = } you have the following options: \n1) Set F_min >= {np.ceil(Fs/N)} Hz. \n2) Set N >= {np.ceil(Fs/F_min)}. \n3) Set Fs <= {np.floor(F_min * N)} Hz.")
+        raise Exception(f"The condition (F_min >= Fs/N) was not met. With Fs = {Fs}, N = {N} and F_min = {F_min} you have the following options: \n1) Set F_min >= {np.ceil(Fs/N)} Hz. \n2) Set N >= {np.ceil(Fs/F_min).astype(int)}. \n3) Set Fs <= {np.floor(F_min * N)} Hz.")
 
     x_pad = np.concatenate((np.zeros(N//2), x, np.zeros(N//2)))  # Add zeros for centered estimates
     M = int(np.floor((len(x_pad) - N) / H)) + 1  # Compute number of estimates that will be generated
