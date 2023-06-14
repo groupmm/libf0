@@ -57,11 +57,11 @@ def swipe(x, Fs=22050, H=256, F_min=55.0, F_max=1760.0, dlog2p=1 / 96, derbs=0.1
     S = np.zeros((len(pc), len(t)))
 
     # Determine P2-WSs [max, min]
-    logWs = np.round(np.log2(np.divide(8 * Fs, [F_min, F_max])))
-    # print(f'Log max and min window size: {logWs}')
+    log_ws_max = np.ceil(np.log2((8 / F_min) * Fs))
+    log_ws_min = np.floor(np.log2((8 / F_max) * Fs))
 
     # P2-WSs - window sizes in samples
-    ws = 2 ** np.arange(logWs[0], logWs[1] - 1, -1, dtype=np.int32)
+    ws = 2 ** np.arange(log_ws_max, log_ws_min - 1, -1, dtype=np.int32)
     # print(f'window sizes in samples: {ws}')
 
     # Determine window sizes used by each pitch candidate
