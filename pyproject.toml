@@ -2,7 +2,7 @@
 name = "libf0"
 version = "1.0.3"
 description = "A Python Library for Fundamental Frequency Estimation in Music Recordings"
-authors = "Sebastian Rosenzweig, Simon Schwär, Peter Meier and Meinard Müller",
+authors = "Sebastian Rosenzweig, Simon Schwär, Peter Meier and Meinard Müller"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
