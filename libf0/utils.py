@@ -114,6 +114,6 @@ def cents_to_hz(F_cents, F_ref=55.0):
     F = F_ref * 2 ** (F_cents / 1200)
 
     # Avoid NaN output
-    F = np.nan_to_num(F, copy=False, nan=0)
+    F = np.nan_to_num(F, copy=True, nan=0)
 
     return F

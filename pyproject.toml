@@ -1,0 +1,33 @@
+[project]
+name = "libf0"
+version = "1.0.3"
+description = "A Python Library for Fundamental Frequency Estimation in Music Recordings"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.3",
+    "numba>=0.63",
+    "scipy>=1.16",
+    "librosa>=0.11"
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1",
+    "matplotlib>=3.10",
+    "pysoundfile>=0.9",
+    "nbstripout>=0.8"
+]
+
+tests = [
+    "pytest>=9.0"
+]
+
+docs = [
+    "sphinx>=8.0",
+    "sphinx-rtd-theme>=3.0"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0,<3.0"]
+build-backend = "poetry.core.masonry.api"
