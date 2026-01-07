@@ -13,7 +13,7 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy>=2.2",
     "numba>=0.63",
-    "scipy>=1.16",
+    "scipy>=1.15",
     "librosa>=0.11"
 ]
 
