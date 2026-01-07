@@ -28,7 +28,7 @@ setup(
                       "numba>=0.63",
                       "scipy>=1.16",
                       "librosa>=0.11"],
-    python_requires='>=3.11',
+    python_requires='>=3.10',
     extras_require={
         'dev': ["jupyter>=1.1",
                 "matplotlib>=3.10",

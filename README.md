@@ -1,4 +1,3 @@
-[![Python Package using Conda](https://github.com/groupmm/libf0/actions/workflows/test_conda.yml/badge.svg)](https://github.com/groupmm/libf0/actions/workflows/test_conda.yml)
 [![Python package](https://github.com/groupmm/libf0/actions/workflows/test_pip.yml/badge.svg)](https://github.com/groupmm/libf0/actions/workflows/test_pip.yml)
 
 
