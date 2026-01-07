@@ -24,9 +24,9 @@ setup(
     ],
     keywords=['audio', 'music', 'f0', 'pitch', 'yin', 'pyin', 'melodia', 'swipe'],
     license='MIT',
-    install_requires=["numpy>=2.3",
+    install_requires=["numpy>=2.2",
                       "numba>=0.63",
-                      "scipy>=1.16",
+                      "scipy>=1.15",
                       "librosa>=0.11"],
     python_requires='>=3.10',
     extras_require={
