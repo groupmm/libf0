@@ -27,7 +27,7 @@ dev = [
 
 tests = [
     "pytest>=9.0",
-    "flake8"
+    "flake8>=7.3"
 ]
 
 docs = [

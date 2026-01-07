@@ -34,7 +34,8 @@ setup(
                 "matplotlib>=3.10",
                 "pysoundfile>=0.9",
                 "nbstripout>=0.8"],
-        'tests': ["pytest>=9.0"],
+        'tests': ["pytest>=9.0",
+                  "flake8>=7.3"],
         'docs': ["sphinx>=8.0",
                  "sphinx-rtd-theme>=3.0"],
     }
