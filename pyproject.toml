@@ -22,7 +22,6 @@ dependencies = [
 dev = [
     "jupyter>=1.1",
     "matplotlib>=3.10",
-    "pysoundfile>=0.9",
     "nbstripout>=0.8"
 ]
 
