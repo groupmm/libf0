@@ -13,6 +13,7 @@
 import os
 import re
 import sys
+from importlib.metadata import version
 
 DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 assert os.path.exists(os.path.join(DIR, 'libf0'))
@@ -24,16 +25,8 @@ project = 'libf0'
 copyright = '2022-2026, Sebastian Rosenzweig, Simon Schwär, Peter Meier, Meinard Müller'
 author = 'Sebastian Rosenzweig, Simon Schwär, Peter Meier, Meinard Müller'
 
-#reading version from local setup file
-setup_fn = next(fn for fn in ['setup.py'] if os.path.exists(os.path.join(DIR, fn)))
-with open(os.path.join(DIR, setup_fn), 'r') as stream:
-   setup_content = stream.read()
-version_match = re.search("version='(.*?)'", setup_content)
-assert version_match is not None
-libtsm_version = version_match.group(1)
-
-version = libtsm_version
-release = libtsm_version
+# reading version
+version = release = version(project)
 
 # -- General configuration ---------------------------------------------------
 
