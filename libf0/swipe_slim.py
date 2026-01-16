@@ -173,7 +173,7 @@ def prime_and_one(upto=1000000):
     A set of prime numbers including 1 & 2
     """
     primes = np.arange(3, upto+1, 2)
-    isprime = np.ones((upto-1)//2, dtype=np.bool8)
+    isprime = np.ones((upto-1)//2, dtype=np.bool)
     for factor in primes[:int(np.sqrt(upto))//2]:
         if isprime[(factor-2)//2]:
             isprime[(factor*3-2)//2::factor] = 0

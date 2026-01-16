@@ -1,0 +1,40 @@
+[project]
+name = "libf0"
+version = "1.1.0"
+description = "A Python Library for Fundamental Frequency Estimation in Music Recordings"
+authors = [
+    { name = "Sebastian Rosenzweig", email="sebastian.rosenzweig@audiolabs-erlangen.de" },
+    { name = "Simon Schwär" },
+    { name = "Peter Meier" },
+    { name = "Meinard Müller", email="meinard.mueller@audiolabs-erlangen.de" },
+]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=2.2",
+    "numba>=0.63",
+    "scipy>=1.15",
+    "librosa>=0.11"
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1",
+    "matplotlib>=3.10",
+    "nbstripout>=0.8"
+]
+
+tests = [
+    "pytest>=9.0",
+    "flake8>=7.3"
+]
+
+docs = [
+    "sphinx>=8.0",
+    "sphinx-rtd-theme>=3.0"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0,<3.0"]
+build-backend = "poetry.core.masonry.api"

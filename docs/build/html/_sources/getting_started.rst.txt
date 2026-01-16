@@ -4,7 +4,7 @@ Getting Started
 Installation
 ------------
 
-With Python >= 3.6, you can install ``libf0`` using the Python package manager pip:
+You can install ``libf0`` with:
 
 .. code-block:: bash
 

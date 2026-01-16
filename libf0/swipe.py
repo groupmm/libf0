@@ -217,7 +217,7 @@ def resample_time(pitch_strength, resampled_time, ti):
     if pitch_strength.shape[1] > 0:
         pitch_strength = interpolate_one_candidate(pitch_strength, ti, resampled_time)
     else:
-        pitch_strength = np.kron(np.ones((len(pitch_strength), len(resampled_time))), np.NaN)
+        pitch_strength = np.kron(np.ones((len(pitch_strength), len(resampled_time))), np.nan)
     return pitch_strength
 
 
@@ -234,8 +234,8 @@ def interpolate_one_candidate(pitch_strength, ti, resampled_time):
 
 def parabolic_int(pitch_strength, strength_threshold, pc):
     """Parabolic interpolation between pitch candidates using pitch strength"""
-    p = np.full((pitch_strength.shape[1],), np.NaN)
-    s = np.full((pitch_strength.shape[1],), np.NaN)
+    p = np.full((pitch_strength.shape[1],), np.nan)
+    s = np.full((pitch_strength.shape[1],), np.nan)
 
     for j in range(pitch_strength.shape[1]):
         i = np.argmax(pitch_strength[:, j])

@@ -1,10 +1,9 @@
-[![Python Package using Conda](https://github.com/groupmm/libf0/actions/workflows/test_conda.yml/badge.svg)](https://github.com/groupmm/libf0/actions/workflows/test_conda.yml)
 [![Python package](https://github.com/groupmm/libf0/actions/workflows/test_pip.yml/badge.svg)](https://github.com/groupmm/libf0/actions/workflows/test_pip.yml)
 
 
 # libf0
 
-This repository contains a Python package called libf0 which provides open-source  implementations for four popular model-based F0-estimation approaches, YIN (Cheveigné & Kawahara, 2002), pYIN (Mauch & Dixon, 2014), an approach inspired by Melodia (Salamon & Gómez, 2012), and SWIPE (Camacho & Harris, 2008).
+This repository contains a Python package called libf0 which provides open-source implementations for four popular model-based F0-estimation approaches, YIN (Cheveigné & Kawahara, 2002), pYIN (Mauch & Dixon, 2014), an approach inspired by Melodia (Salamon & Gómez, 2012), and SWIPE (Camacho & Harris, 2008).
 
 If you use the libf0 in your research, please consider the following references.
 
@@ -32,48 +31,30 @@ Meinard Müller. Fundamentals of Music Processing – Using Python and Jupyter N
 
 ## Installing
 
-If you just want to try our example notebook, you can run it using Binder directly in your browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/groupmm/libf0/HEAD)
-
-To install the libf0 locally, you can use the Python package manager pip:
+To install libf0, please run
 
 ```
-pip install libf0
+pip install libf0[dev,tests,docs]
 ```
-
-We recommend to do this inside a conda or virtual environment (requiring at least Python 3.7).
-If you want to run the example notebook locally, you **must** first install libf0 to resolve all dependencies. Then, you can clone this repository using
-
-```
-git clone https://github.com/groupmm/libf0.git
-```
-install Jupyter using
-
-```
-pip install jupyter
-```
-
-and then start the notebook server via
-
-```
-jupyter notebook
-```
-
+with the following optional dependencies:
+* `dev`: for development and running the demo notebook.
+* `tests`: for running the unittests.
+* `docs`: to build the API docs.
 
 ## Documentation
-There is also an API documentation for libf0:
+You can find the API documentation for libf0 here:
 
 https://groupmm.github.io/libf0
 
 ## Contributing
 
-We are happy for suggestions and contributions. We would be grateful for either directly contacting us via email (meinard.mueller@audiolabs-erlangen.de) or for creating an issue in our Github repository. Please do not submit a pull request without prior consultation with us.
+We are happy for suggestions and contributions. We would be grateful for either directly contacting us via email (meinard.mueller@audiolabs-erlangen.de) or for creating an issue or pull request in our Github repository.
 
 ## Tests
 
-We provide automated tests for each algorithm. To execute the test script, you will need to install extra requirements for testing:
+We provide automated tests for each algorithm. To execute the test script, run
 
 ```
-pip install 'libf0[tests]'
 pytest tests
 ```
 
