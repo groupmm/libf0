@@ -138,8 +138,14 @@ def test_pyin_viterbi_core_impls_match():
     C = np.ones((2 * B, 1)) / (2 * B)
 
     legacy = libf0.viterbi_log_likelihood(A, C.flatten(), O)
-    source_idx, log_trans, counts = libf0.compute_transition_structure_from_matrix(A)
-    fast = libf0.viterbi_log_likelihood_fast(source_idx, log_trans, counts, C.flatten(), O)
+    source_idx_matrix, log_trans_matrix, counts_matrix = libf0.compute_transition_structure_from_matrix(A)
+    source_idx_block, log_trans_block, counts_block = libf0.compute_transition_structure_pyin_block(B, triang_distr)
+
+    assert np.array_equal(source_idx_matrix, source_idx_block)
+    assert np.array_equal(log_trans_matrix, log_trans_block)
+    assert np.array_equal(counts_matrix, counts_block)
+
+    fast = libf0.viterbi_log_likelihood_fast(source_idx_block, log_trans_block, counts_block, C.flatten(), O)
 
     assert np.array_equal(legacy, fast)
 

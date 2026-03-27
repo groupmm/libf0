@@ -88,14 +88,13 @@ def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=
     max_step_cents = 50  # Pitch jump can be at most 50 cents from frame to frame
     max_step = int(max_step_cents / R)
     triang_distr = triang.pdf(np.arange(-max_step, max_step+1), 0.5, scale=2*max_step, loc=-max_step)
-    A = compute_transition_matrix(B, triang_distr)
-    
     # HMM smoothing
     C = np.ones((2*B, 1)) / (2*B)  # uniform initialization
     if viterbi_impl == "legacy":
+        A = compute_transition_matrix(B, triang_distr)
         f0_idxs = viterbi_log_likelihood(A, C.flatten(), O)
     else:
-        source_idx, log_trans, counts = compute_transition_structure_from_matrix(A)
+        source_idx, log_trans, counts = compute_transition_structure_pyin_block(B, triang_distr)
         f0_idxs = viterbi_log_likelihood_fast(source_idx, log_trans, counts, C.flatten(), O)
     
     # Obtain F0-trajectory
@@ -511,6 +510,145 @@ def compute_transition_structure_from_matrix(A):
                 log_trans[target, count] = np.log(value + tiny)
                 count += 1
         counts[target] = count
+
+    return source_idx, log_trans, counts
+
+
+@njit
+def compute_transition_structure_pyin_block(M, triang_distr, prob_self=0.99):
+    """Build sparse predecessor structure from pYIN block transitions directly.
+
+    The pYIN transition used here has two voicing blocks:
+    - same-voicing local triangular transitions (scaled by `prob_self`)
+    - cross-voicing same-pitch transitions (scaled by `1 - prob_self`)
+    """
+    max_step = len(triang_distr) // 2
+    states = 2 * M
+    tiny = np.finfo(0.).tiny
+
+    same_counts = np.zeros(M, dtype=np.int32)
+
+    for source in range(M):
+        if source < max_step:
+            start = 0
+            end = source + max_step
+            weights = triang_distr[max_step - source:-1]
+            denom = np.sum(weights)
+            if denom <= 0:
+                continue
+            for k, target in enumerate(range(start, end)):
+                prob = prob_self * weights[k] / denom
+                if prob > 0:
+                    same_counts[target] += 1
+        elif source < M - max_step:
+            start = source - max_step
+            end = source + max_step + 1
+            for k, target in enumerate(range(start, end)):
+                prob = prob_self * triang_distr[k]
+                if prob > 0:
+                    same_counts[target] += 1
+        else:
+            start = source - max_step
+            end = M
+            weights = triang_distr[0:max_step - (source - M)]
+            denom = np.sum(weights)
+            if denom <= 0:
+                continue
+            for target in range(start, end):
+                k = target - start
+                prob = prob_self * weights[k] / denom
+                if prob > 0:
+                    same_counts[target] += 1
+
+    max_width = int(np.max(same_counts)) + 1  # +1 for cross-voicing same-pitch edge
+    source_idx = np.zeros((states, max_width), dtype=np.int32)
+    log_trans = np.full((states, max_width), -np.inf)
+    counts = np.zeros(states, dtype=np.int32)
+    log_cross = np.log((1.0 - prob_self) + tiny)
+
+    # Match dense-structure source ordering for unvoiced targets:
+    # source indices are visited in ascending order, so cross-voicing edges
+    # (from voiced sources 0..M-1) appear before same-voicing edges (M..2M-1).
+    for pitch in range(M):
+        pitch_u = pitch + M
+        idx_u = counts[pitch_u]
+        source_idx[pitch_u, idx_u] = pitch
+        log_trans[pitch_u, idx_u] = log_cross
+        counts[pitch_u] += 1
+
+    for source in range(M):
+        if source < max_step:
+            start = 0
+            end = source + max_step
+            weights = triang_distr[max_step - source:-1]
+            denom = np.sum(weights)
+            for k, target in enumerate(range(start, end)):
+                prob = prob_self * weights[k] / denom
+                if prob <= 0:
+                    continue
+                log_prob = np.log(prob + tiny)
+
+                idx_v = counts[target]
+                source_idx[target, idx_v] = source
+                log_trans[target, idx_v] = log_prob
+                counts[target] += 1
+
+                target_u = target + M
+                source_u = source + M
+                idx_u = counts[target_u]
+                source_idx[target_u, idx_u] = source_u
+                log_trans[target_u, idx_u] = log_prob
+                counts[target_u] += 1
+        elif source < M - max_step:
+            start = source - max_step
+            end = source + max_step + 1
+            for k, target in enumerate(range(start, end)):
+                prob = prob_self * triang_distr[k]
+                if prob <= 0:
+                    continue
+                log_prob = np.log(prob + tiny)
+
+                idx_v = counts[target]
+                source_idx[target, idx_v] = source
+                log_trans[target, idx_v] = log_prob
+                counts[target] += 1
+
+                target_u = target + M
+                source_u = source + M
+                idx_u = counts[target_u]
+                source_idx[target_u, idx_u] = source_u
+                log_trans[target_u, idx_u] = log_prob
+                counts[target_u] += 1
+        else:
+            start = source - max_step
+            end = M
+            weights = triang_distr[0:max_step - (source - M)]
+            denom = np.sum(weights)
+            for k, target in enumerate(range(start, end)):
+                prob = prob_self * weights[k] / denom
+                if prob <= 0:
+                    continue
+                log_prob = np.log(prob + tiny)
+
+                idx_v = counts[target]
+                source_idx[target, idx_v] = source
+                log_trans[target, idx_v] = log_prob
+                counts[target] += 1
+
+                target_u = target + M
+                source_u = source + M
+                idx_u = counts[target_u]
+                source_idx[target_u, idx_u] = source_u
+                log_trans[target_u, idx_u] = log_prob
+                counts[target_u] += 1
+
+    # Match dense-structure ordering for voiced targets:
+    # cross-voicing edges come from sources M..2M-1, after same-voicing sources.
+    for pitch in range(M):
+        idx_v = counts[pitch]
+        source_idx[pitch, idx_v] = pitch + M
+        log_trans[pitch, idx_v] = log_cross
+        counts[pitch] += 1
 
     return source_idx, log_trans, counts
 

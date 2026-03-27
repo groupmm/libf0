@@ -85,7 +85,7 @@ def prepare_pyin_state(x, Fs, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10,
     )
     A = libf0.compute_transition_matrix(B, triang_distr)
     C = np.ones((2 * B, 1)) / (2 * B)
-    source_idx, log_trans, counts = libf0.compute_transition_structure_from_matrix(A)
+    source_idx, log_trans, counts = libf0.compute_transition_structure_pyin_block(B, triang_distr)
     return {
         "O": O,
         "A": A,
