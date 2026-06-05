@@ -8,6 +8,8 @@
 import numpy as np
 from scipy.signal import chirp
 from scipy.interpolate import interp1d
+from scipy.special import beta, comb
+from scipy.stats import triang
 import libf0
 
 
@@ -69,6 +71,86 @@ def test_pyin():
     # exclude first frame, since it is always 0
     assert np.allclose(libf0.hz_to_cents(f0_pyin_x1[1:]), libf0.hz_to_cents(F_sine), rtol=0, atol=atol_sine)
     assert np.allclose(libf0.hz_to_cents(f0_pyin_x2[1:]), libf0.hz_to_cents(chirp_func(t_pyin_x2[1:])), rtol=0, atol=20)
+
+
+def test_pyin_viterbi_impls_match():
+    R = 10
+    thrs = np.arange(0.01, 1, 0.01)
+    betas = [1, 18]
+    abs_min_prob = 0.01
+    voicing_prob = 0.5
+
+    f0_legacy, t_legacy, conf_legacy = libf0.pyin(
+        x1, Fs=Fs, N=N, H=H, F_min=F_min, F_max=F_max, R=R,
+        thresholds=thrs, beta_params=betas,
+        absolute_min_prob=abs_min_prob, voicing_prob=voicing_prob,
+        viterbi_impl="legacy")
+    f0_fast, t_fast, conf_fast = libf0.pyin(
+        x1, Fs=Fs, N=N, H=H, F_min=F_min, F_max=F_max, R=R,
+        thresholds=thrs, beta_params=betas,
+        absolute_min_prob=abs_min_prob, voicing_prob=voicing_prob,
+        viterbi_impl="fast")
+
+    assert np.array_equal(f0_legacy, f0_fast)
+    assert np.array_equal(t_legacy, t_fast)
+    assert np.array_equal(conf_legacy, conf_fast)
+
+
+def test_pyin_viterbi_core_impls_match():
+    R = 10
+    thrs = np.arange(0.01, 1, 0.01)
+    beta_params = [1, 18]
+    absolute_min_prob = 0.01
+    voicing_prob = 0.5
+    x_pad = np.concatenate((np.zeros(N // 2), x2, np.zeros(N // 2)))
+
+    thr_idxs = np.arange(len(thrs))
+    beta_distr = comb(len(thrs), thr_idxs) * beta(
+        thr_idxs + beta_params[0],
+        len(thrs) - thr_idxs + beta_params[1],
+    ) / beta(beta_params[0], beta_params[1])
+
+    B = int(np.log2(F_max / F_min) * (1200 / R))
+    F_axis = F_min * np.power(2, np.arange(B) * R / 1200)
+    O, _, _, _ = libf0.yin_multi_thr(
+        x_pad,
+        Fs=Fs,
+        N=N,
+        H=H,
+        F_min=F_min,
+        F_max=F_max,
+        thresholds=thrs,
+        beta_distr=beta_distr,
+        absolute_min_prob=absolute_min_prob,
+        F_axis=F_axis,
+        voicing_prob=voicing_prob,
+    )
+
+    max_step_cents = 50
+    max_step = int(max_step_cents / R)
+    triang_distr = triang.pdf(
+        np.arange(-max_step, max_step + 1),
+        0.5,
+        scale=2 * max_step,
+        loc=-max_step,
+    )
+    A = libf0.compute_transition_matrix(B, triang_distr)
+    C = np.ones((2 * B, 1)) / (2 * B)
+
+    legacy = libf0.viterbi_log_likelihood(A, C.flatten(), O)
+    source_idx, log_trans, counts = libf0.compute_transition_structure_from_matrix(A)
+    fast = libf0.viterbi_log_likelihood_fast(source_idx, log_trans, counts, C.flatten(), O)
+
+    assert np.array_equal(legacy, fast)
+
+
+def test_pyin_viterbi_impl_fail():
+    try:
+        libf0.pyin(x1, Fs=Fs, N=N, H=H, F_min=F_min, F_max=F_max,
+                   viterbi_impl="bogus")
+    except ValueError:
+        return
+    raise AssertionError("Expected ValueError for invalid viterbi_impl")
 
 
 def test_salience():

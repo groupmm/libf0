@@ -11,9 +11,12 @@ from .yin import cumulative_mean_normalized_difference_function, parabolic_inter
 from numba import njit
 
 
+VITERBI_IMPLS = ("legacy", "fast")
+
+
 # pYIN estimate computation
 def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=np.arange(0.01, 1, 0.01),
-         beta_params=[1, 18], absolute_min_prob=0.01, voicing_prob=0.5):
+         beta_params=[1, 18], absolute_min_prob=0.01, voicing_prob=0.5, viterbi_impl="legacy"):
     """
     Implementation of the pYIN F0-estimation algorithm.
 
@@ -45,6 +48,8 @@ def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=
         Prior for voice activity
     voicing_prob: float
         Prior for transition probability?
+    viterbi_impl : str
+        Viterbi backend. One of ``"legacy"`` or ``"fast"``.
     Returns
     -------
     f0 : ndarray
@@ -57,6 +62,9 @@ def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=
 
     if F_min > F_max:
         raise Exception("F_min must be smaller than F_max!")
+
+    if viterbi_impl not in VITERBI_IMPLS:
+        raise ValueError(f"Unknown viterbi_impl '{viterbi_impl}'. Expected one of {VITERBI_IMPLS}.")
 
     if F_min < Fs/N:        
         raise Exception(f"The condition (F_min >= Fs/N) was not met. With Fs = {Fs}, N = {N} and F_min = {F_min} you have the following options: \n1) Set F_min >= {np.ceil(Fs/N)} Hz. \n2) Set N >= {np.ceil(Fs/F_min).astype(int)}. \n3) Set Fs <= {np.floor(F_min * N)} Hz.")
@@ -84,7 +92,11 @@ def pyin(x, Fs=22050, N=2048, H=256, F_min=55.0, F_max=1760.0, R=10, thresholds=
     
     # HMM smoothing
     C = np.ones((2*B, 1)) / (2*B)  # uniform initialization
-    f0_idxs = viterbi_log_likelihood(A, C.flatten(), O)  # libfmp Viterbi implementation
+    if viterbi_impl == "legacy":
+        f0_idxs = viterbi_log_likelihood(A, C.flatten(), O)
+    else:
+        source_idx, log_trans, counts = compute_transition_structure_from_matrix(A)
+        f0_idxs = viterbi_log_likelihood_fast(source_idx, log_trans, counts, C.flatten(), O)
     
     # Obtain F0-trajectory
     F_axis_extended = np.concatenate((F_axis, np.zeros(len(F_axis))))
@@ -467,6 +479,73 @@ def viterbi_log_likelihood(A, C, B_O):
     S_opt[-1] = np.argmax(D_log[:, -1])
     for n in range(N-2, -1, -1):
         S_opt[n] = E[int(S_opt[n+1]), n]
+
+    return S_opt
+
+
+@njit
+def compute_transition_structure_from_matrix(A):
+    """Build a sparse predecessor structure from a dense transition matrix."""
+    I = A.shape[0]
+    tiny = np.finfo(0.).tiny
+
+    max_width = 0
+    for target in range(I):
+        count = 0
+        for source in range(I):
+            if A[source, target] > 0:
+                count += 1
+        if count > max_width:
+            max_width = count
+
+    source_idx = np.zeros((I, max_width), dtype=np.int32)
+    log_trans = np.full((I, max_width), -np.inf)
+    counts = np.zeros(I, dtype=np.int32)
+
+    for target in range(I):
+        count = 0
+        for source in range(I):
+            value = A[source, target]
+            if value > 0:
+                source_idx[target, count] = source
+                log_trans[target, count] = np.log(value + tiny)
+                count += 1
+        counts[target] = count
+
+    return source_idx, log_trans, counts
+
+
+@njit
+def viterbi_log_likelihood_fast(source_idx, log_trans, counts, C, B_O):
+    """Sparse structured log-likelihood Viterbi for pYIN transition graphs."""
+    I = source_idx.shape[0]
+    N = B_O.shape[1]
+    tiny = np.finfo(0.).tiny
+    C_log = np.log(C + tiny)
+    B_O_log = np.log(B_O + tiny)
+
+    D_log = np.zeros((I, N))
+    E = np.zeros((I, N - 1), dtype=np.int32)
+    D_log[:, 0] = C_log + B_O_log[:, 0]
+
+    for n in range(1, N):
+        for target in range(I):
+            best_source = 0
+            best_val = -np.inf
+            count = counts[target]
+            for k in range(count):
+                source = source_idx[target, k]
+                value = log_trans[target, k] + D_log[source, n - 1]
+                if value > best_val:
+                    best_val = value
+                    best_source = source
+            D_log[target, n] = best_val + B_O_log[target, n]
+            E[target, n - 1] = best_source
+
+    S_opt = np.zeros(N, dtype=np.int32)
+    S_opt[-1] = np.argmax(D_log[:, -1])
+    for n in range(N - 2, -1, -1):
+        S_opt[n] = E[int(S_opt[n + 1]), n]
 
     return S_opt
 
