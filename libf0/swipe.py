@@ -205,8 +205,6 @@ def resample_ferbs(spectrum, f, ferbs):
 
     for t in range(spectrum.shape[1]):
         spl = interpolate.splrep(f, spectrum[:, t])
-        interpolate.splev(ferbs, spl)
-
         magnitude[:, t] = interpolate.splev(ferbs, spl)
 
     return np.maximum(magnitude, 0)
